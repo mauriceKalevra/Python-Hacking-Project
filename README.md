@@ -7,7 +7,7 @@ Prerequesites:
 
 Run the victims http server:  
 
-~$ docker build -t victim .
+~$ docker build -t victim .  
 ~$ docker run -p 22:22 victim
 
 Use the Webapplication:
