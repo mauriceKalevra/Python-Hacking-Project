@@ -35,5 +35,3 @@ WORKDIR Web2-Projekt
 RUN npm install
 
 CMD ./entrypoint.sh
-#CMD ["node", "app.js", "&&", "/usr/sbin/sshd", "-D"]
-#CMD ["/usr/sbin/sshd","-D", "&&", "node", "app.js"lss" ]
