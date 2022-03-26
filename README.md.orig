@@ -6,9 +6,14 @@ Prerequesites:
 - Docker installed
 
 Run the victims http server:  
-~$ cd victim-http-server  
+<<<<<<< HEAD
+~$ cd victim-http-server
+~$ docker build -t victim .
+=======
+
 ~$ docker build -t victim .  
-~$ docker run -p 22:22 victim  
+>>>>>>> 8a50f8bac8bf7561d79c14d1ea857d5fceed00e8
+~$ docker run -p 22:22 victim
 
 Use the Webapplication:
 
