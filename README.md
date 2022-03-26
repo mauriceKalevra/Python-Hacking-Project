@@ -6,7 +6,7 @@ Prerequesites:
 - Docker installed
 
 Run the victims http server:  
-
+~$ cd victim-http-server
 ~$ docker build -t victim .
 ~$ docker run -p 22:22 victim
 
