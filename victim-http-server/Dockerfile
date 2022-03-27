@@ -24,14 +24,12 @@ EXPOSE 22
 
 RUN git clone https://github.com/mauriceKalevra/Web2-Projekt.git
 
-COPY entrypoint.sh /entrypoint.sh
-
-RUN chmod 700 entrypoint.sh
-
-RUN mv entrypoint.sh Web2-Projekt
-
 WORKDIR Web2-Projekt
 
 RUN npm install
+
+RUN echo  "/usr/sbin/sshd -D & node app.js">entrypoint.sh
+
+RUN chmod 700 entrypoint.sh
 
 CMD ./entrypoint.sh
