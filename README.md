@@ -16,6 +16,6 @@ In browser open 173.17.0.2(your dockerip):1337
 
 SSH into the 'Host-Server'(Docker container):
 
-~$ ssh root@172.17.0.2(docker container ip)
+~$ ssh root@172.17.0.2(docker container ip)  
 pw : root
 
