@@ -1,0 +1,59 @@
+% class definitions
+\documentclass[a4paper,12pt]{scrartcl}
+
+% Packages
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{tabto}
+\usepackage{listings}
+\usepackage{quoting} %
+\usepackage{lipsum}
+\usepackage[left, pagewise, edtable]{lineno}
+\quotingsetup{font={itshape}, leftmargin=2em, rightmargin=0in, vskip=1ex}
+\usepackage{framed} 
+\usepackage{xcolor} 
+\colorlet{shadecolor}{gray!25}
+
+%myshaded
+\newenvironment{myshaded}{\colorlet{shadecolor}{lightgray}\color{black}\begin{shaded}\begin{internallinenumbers}}{\end{internallinenumbers}\end{shaded}}
+
+%bibtext
+\usepackage[backend=biber, style=authoryear]{biblatex}
+\addbibresource{quellen.bib}
+
+
+% Front page
+
+\title{ Hacking mit Python}
+\subtitle{Hausarbeit}
+\author{Moritz Rupp}
+\date{Sommersemester 2022}
+\setlength{\parindent}{0em} 
+
+
+%Document start 
+\begin{document}
+
+
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\section{Abstract}
+\begin{abstract}
+\textbf{Abstract.}
+In dem Modul 'Hacking mit Python' ist es Aufgabe verschiedene Services wie ein HTTP Server und SSH automatisiert anhand der Programmiersprache Python anzugreifen und zu kompromitieren.\\
+\dots
+\end{abstract}
+\section{Einleitung}
+
+
+
+
+
+\end{document}
