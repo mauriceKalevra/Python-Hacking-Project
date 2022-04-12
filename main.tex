@@ -1,5 +1,7 @@
 % class definitions
-\documentclass[a4paper,12pt]{scrartcl}
+\documentclass[12pt]{article}
+\usepackage[ngerman,english]{babel}
+\setlength{\parindent}{0em} 
 
 % Packages
 
@@ -28,11 +30,10 @@
 
 % Front page
 
-\title{ Hacking mit Python}
-\subtitle{Hausarbeit}
-\author{Moritz Rupp}
+\title{ Hacking mit Python\\\vspace{3mm}\small{ Prof. Dr. Martin Rieger}}
+\author{ \small{verfasst von}\\ Moritz Rupp}
 \date{Sommersemester 2022}
-\setlength{\parindent}{0em} 
+
 
 
 %Document start 
@@ -44,16 +45,17 @@
 \newpage
 \tableofcontents
 \newpage
-\section{Abstract}
+
 \begin{abstract}
-\textbf{Abstract.}
-In dem Modul 'Hacking mit Python' ist es Aufgabe verschiedene Services wie ein HTTP Server und SSH automatisiert anhand der Programmiersprache Python anzugreifen und zu kompromitieren.\\
-\dots
+\noindent In dem Modul 'Hacking mit Python' ist es Aufgabe verschiedene Services wie ein HTTP Server und SSH automatisiert anhand der Programmiersprache Python anzugreifen und zu kompromitieren.\\ Hierfür können verschiedene Frameworks und Tools genutzt werden. Schlussendlich soll es möglich sein dauerhaften Zugang auf den Opfer-Server über eine Schnittstelle zu erlangen.   
 \end{abstract}
+
 \section{Einleitung}
+Anwendungen wie Webserver sind häufig der Zentrale und zugänglichste Teil einer digitalen Infrastrustur. So werden hier meist nicht nur harmlose Html Dokumente abgerufen sondern häufig auch Sicherheitsrelevante Dienste und Dateien gehosted. Dies können Zugänge der Schnittstelle, unverschlüsselte Nutzerdaten oder viele weitere sensitive Informationen sein.
 
-
-
+\newpage
+\section{Infrastrustur}
+\subsection{Opfer-Server}
 
 
 \end{document}
