@@ -55,11 +55,17 @@ Anwendungen wie Webserver sind häufig der zentrale und angreifsbarste Teil eine
 \\
 Ziel dieses Projektes ist es die angreifbare Infrastrustur in Form des Webserver bereitzustellen und diesen anschließend anhand einer in Python geschriebenen Software anzugreifen.
 Der Angriff soll im ersten Schritt alle Inhalte des Opfer-Servers aufspüren und herunterladen. Anschließend sollten über den Browser alle Seiten automatisiert besucht und die Funktionalität genutzt werden.
-Des weiteren ist eine in der Infrastrustur bereitgestellte Schnittstelle wie SSH anhand eines Wörterbuch-Angriffs zu kompromitieren. Abschließend soll mit den erlangten Zugangsdaten eine Schadsoftware auf den Opfer-Server geladen werden.  
+Des weiteren ist eine in der Infrastrustur bereitgestellte Schnittstelle wie SSH anhand eines Wörterbuch-Angriffs zu kompromitieren. Abschließend soll mit den erlangten Zugangsdaten eine Schadsoftware auf den Opfer-Server geladen werden, mit dieser ein defacement der gehosteten Webseite umgesetzt werden kann.\\
+Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schritte. 
 
 \newpage
 \section{Infrastrustur}
 \subsection{Opfer-Server}
+Der Opfer-Server soll ein Http-Server mit angreifbarer Webanwendung sein. Hierfür kommen etliche Frameworks und Distributionen wie Apache und xampp in frage. Auch Python verfügt über entsprechende Biblotheken.\\
+Dennoch habe ich mich für eine node Anwendung mit in einem Docker Container entschieden.
+Container sind eine leichtgewichtige Art von Virtualisierung auf Betriebssystemebene. Dies kann genutzt werden um eine Anwendung mitsamt ihren Abhängigkeiten als eine abgeschlossene Einheit zu verpacken und zu betrieben. Dies bietet Vorteile wie Plattformunabhängigkeit und einfache Ausfürbarkeit.\\
+Das Packet aus Anwendung und Abhängigkeiten
+nennt man auch Container-Image. Dies kann anhand des Dockerfiles erzeugt werden. Das Dockerfile enthält alle instruktionen die zur Erstellung des Images benötigt werden.  
 
-
+\subsection{Webanwendung}
 \end{document}
