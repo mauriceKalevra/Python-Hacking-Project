@@ -20,6 +20,7 @@
 \usepackage{xcolor} 
 \colorlet{shadecolor}{gray!25}
 
+
 %myshaded
 \newenvironment{myshaded}{\colorlet{shadecolor}{lightgray}\color{black}\begin{shaded}\begin{internallinenumbers}}{\end{internallinenumbers}\end{shaded}}
 
@@ -53,7 +54,7 @@
 \section{Einleitung}
 Anwendungen wie Webserver sind häufig der zentrale und angreifsbarste Teil einer digitalen Infrastrustur. So werden hier meist nicht nur harmlose Html Dokumente abgerufen, sondern häufig auch Sicherheitsrelevante Dienste und Dateien gehosted. Dies können Zugänge der Schnittstelle, unverschlüsselte Nutzerdaten oder viele weitere sensitive Informationen sein.
 \\
-Ziel dieses Projektes ist es die angreifbare Infrastrustur in Form des Webserver bereitzustellen und diesen anschließend anhand einer in Python geschriebenen Software anzugreifen.
+Ziel dieses Projektes ist es die angreifbare Infrastrustur in Form des Webserver bereitzustellen und diesen anschließend anhand einer in Python programmierten Software anzugreifen.
 Der Angriff soll im ersten Schritt alle Inhalte des Opfer-Servers aufspüren und herunterladen. Anschließend sollten über den Browser alle Seiten automatisiert besucht und die Funktionalität genutzt werden.
 Des weiteren ist eine in der Infrastrustur bereitgestellte Schnittstelle wie SSH anhand eines Wörterbuch-Angriffs zu kompromitieren. Abschließend soll mit den erlangten Zugangsdaten eine Schadsoftware auf den Opfer-Server geladen werden, mit dieser ein defacement der gehosteten Webseite umgesetzt werden kann.\\
 Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schritte. 
@@ -65,7 +66,51 @@ Der Opfer-Server soll ein Http-Server mit angreifbarer Webanwendung sein. Hierf�
 Dennoch habe ich mich für eine node Anwendung mit in einem Docker Container entschieden.
 Container sind eine leichtgewichtige Art von Virtualisierung auf Betriebssystemebene. Dies kann genutzt werden um eine Anwendung mitsamt ihren Abhängigkeiten als eine abgeschlossene Einheit zu verpacken und zu betrieben. Dies bietet Vorteile wie Plattformunabhängigkeit und einfache Ausfürbarkeit.\\
 Das Packet aus Anwendung und Abhängigkeiten
-nennt man auch Container-Image. Dies kann anhand des Dockerfiles erzeugt werden. Das Dockerfile enthält alle instruktionen die zur Erstellung des Images benötigt werden.  
+nennt man auch Container-Image. Dies kann anhand des Dockerfiles erzeugt werden. Das Dockerfile enthält alle instruktionen die zur Erstellung des Images benötigt werden.  \\
+\begin{shaded}
+\begin{internallinenumbers}
+FROM ubuntu:latest
+
+RUN apt update \&\& apt install  openssh-server sudo -y
+
+RUN apt install git -y
+
+RUN apt install nodejs -y
+
+RUN apt install npm -y
+
+RUN npm install express
+
+RUN npm install better-sqlite3
+
+RUN npm install morgan
+
+RUN echo "PermitRootLogin yes"\>etc/ssh/sshd\_config
+
+RUN  echo 'root:root' | chpasswd
+
+RUN service ssh start
+
+EXPOSE 22
+
+RUN git clone https://github.com/mauriceKalevra/Web2-Projekt.git
+
+WORKDIR Web2-Projekt
+
+RUN npm install
+
+RUN echo  "/usr/sbin/sshd -D \& node app.js">entrypoint.sh
+
+RUN chmod 700 entrypoint.sh
+
+CMD ./entrypoint.sh
+\end{internallinenumbers}
+\end{shaded}
+\begin{center}
+ Codebeispiel 1: Dockerfile
+\end{center}
+
+
 
 \subsection{Webanwendung}
 \end{document}
