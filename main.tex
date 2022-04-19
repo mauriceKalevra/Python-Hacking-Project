@@ -62,11 +62,11 @@ Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schri
 \newpage
 \section{Infrastrustur}
 \subsection{Opfer-Server}
-Der Opfer-Server soll ein Http-Server mit angreifbarer Webanwendung sein. Hierfür kommen etliche Frameworks und Distributionen wie Apache und xampp in frage. Auch Python verfügt über entsprechende Biblotheken.\\
-Dennoch habe ich mich für eine node Anwendung mit in einem Docker Container entschieden.
-Container sind eine leichtgewichtige Art von Virtualisierung auf Betriebssystemebene. Dies kann genutzt werden um eine Anwendung mitsamt ihren Abhängigkeiten als eine abgeschlossene Einheit zu verpacken und zu betrieben. Dies bietet Vorteile wie Plattformunabhängigkeit und einfache Ausfürbarkeit.\\
+Der Opfer-Server soll ein Http-Server mit angreifbarer Webanwendung und Schnittstelle sein. Hierfür kommen etliche Frameworks und Distributionen wie Apache und xampp in Frage.
+Aufrund der Anforderungen habe ich mich für eine Node Anwendung in einem Docker Container entschieden.
+Container sind eine leichtgewichtige Art von Virtualisierung auf Betriebssystemebene. Dies kann genutzt werden um eine Anwendung mitsamt ihren Abhängigkeiten als eine abgeschlossene Einheit zu verpacken und zu betrieben. Dies bietet Vorteile wie Plattformunabhängigkeit und einfache Ausfürbarkeit. In diesem Fall wird ein node Web-Server mitsamt ssh Service aufgesetzt.\\
 Das Packet aus Anwendung und Abhängigkeiten
-nennt man auch Container-Image. Dies kann anhand des Dockerfiles erzeugt werden. Das Dockerfile enthält alle instruktionen die zur Erstellung des Images benötigt werden.  \\
+nennt man auch Container-Image. Dies kann anhand des Dockerfiles erzeugt werden. Das Dockerfile enthält alle Instruktionen die zur Erstellung des Images benötigt werden.  \\
 \begin{shaded}
 \begin{internallinenumbers}
 FROM ubuntu:latest
@@ -107,10 +107,9 @@ CMD ./entrypoint.sh
 \end{internallinenumbers}
 \end{shaded}
 \begin{center}
- Codebeispiel 1: Dockerfile
+ Codebeispiel 1: Dockerfile des Http-Servers
 \end{center}
-
-
+In Zeile 1 wird das Base Image deklariert.
 
 \subsection{Webanwendung}
 \end{document}
