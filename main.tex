@@ -17,9 +17,11 @@
 \usepackage[left, pagewise, edtable]{lineno}
 \quotingsetup{font={itshape}, leftmargin=2em, rightmargin=0in, vskip=1ex}
 \usepackage{framed} 
+\usepackage{xcolor}
+\usepackage{tcolorbox}
 \usepackage{xcolor} 
 \colorlet{shadecolor}{gray!25}
-
+\definecolor{mshadecolor}{rgb}{0.7421875,0.7421875,0.7421875}
 
 %myshaded
 \newenvironment{myshaded}{\colorlet{shadecolor}{lightgray}\color{black}\begin{shaded}\begin{internallinenumbers}}{\end{internallinenumbers}\end{shaded}}
@@ -64,7 +66,7 @@ Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schri
 \subsection{Opfer-Server}
 Der Opfer-Server soll ein Http-Server mit angreifbarer Webanwendung und Schnittstelle sein. Hierfür kommen etliche Frameworks und Distributionen wie Apache und xampp in Frage.
 Aufrund der Anforderungen habe ich mich für eine Node Anwendung in einem Docker Container entschieden.
-Container sind eine leichtgewichtige Art von Virtualisierung auf Betriebssystemebene. Dies kann genutzt werden um eine Anwendung mitsamt ihren Abhängigkeiten als eine abgeschlossene Einheit zu verpacken und zu betrieben. Dies bietet Vorteile wie Plattformunabhängigkeit und einfache Ausfürbarkeit. In diesem Fall wird ein node Web-Server mitsamt ssh Service aufgesetzt.\\
+Container sind eine leichtgewichtige Art von Virtualisierung auf Betriebssystemebene. Dies kann genutzt werden um eine Anwendung mitsamt ihren Abhängigkeiten als eine abgeschlossene Einheit zu verpacken und zu betrieben. Dies bietet Vorteile wie Plattformunabhängigkeit und einfache Ausfürbarkeit. In diesem Fall wird ein node Web-Server mitsamt SSH Service aufgesetzt.\\
 Das Packet aus Anwendung und Abhängigkeiten
 nennt man auch Container-Image. Dies kann anhand des Dockerfiles erzeugt werden. Das Dockerfile enthält alle Instruktionen die zur Erstellung des Images benötigt werden.  \\
 \begin{shaded}
@@ -107,9 +109,14 @@ CMD ./entrypoint.sh
 \end{internallinenumbers}
 \end{shaded}
 \begin{center}
- Codebeispiel 1: Dockerfile des Http-Servers
+ Codebeispiel 1: Dockerfile des Http-SSH-Servers
 \end{center}
-In Zeile 1 wird das Base Image deklariert.
-
+Ein Container wird stets auf einem Base Image aufgebaut. Dieses dient als Fundament für alle folge Instruktionen und enthält je nach Image ein grundlegendes Dateisystem sowie vorinstallierte Software.\\
+In Zeile 1(vgl. Codebeispiel 1) wird als Base Image Ubuntu deklariert. 
+Anschließend werden verschiedene Dienste wie openssh, git, nodejs sowie einige npm Packete installiert.
+In Zeile 10 wird das root Passwort für die Schnittstelle des Webservers bzw. Containers festgelegt. Die eigentliche Webanwendung wird in Zeile 13 als ein Repository durch git heruntergeladen und ins Zeile 15 installiert. In Zeile 16 wird das Kommando zum starten des SSH Dienstes und der Node Anwendung in ein Bash-Skript geschrieben, um dieses anschließend ausführbar zu machen und in Zeile 18 zu starten.\\
+Mit \colorbox{mshadecolor}{\parbox{0.46\textwidth}{Docker build -t victim-http-server .}} wird aus dem Dockerfile ein Image erstellt. Dieses kann nun mit \colorbox{mshadecolor}{\parbox{0.51\textwidth}{Docker run -p 22:22 victim-http-server}} gestartet werden. Nun läuft der HTTP Server und die Webanwendung ist im Browser unter
+\colorbox{mshadecolor}{\parbox{0.20\textwidth}{173.17.0.2:1337}} einsehbar. Des weiteren ist eine Admin Schnittstelle über \colorbox{mshadecolor}{\parbox{0.26\textwidth}{ssh root@173.17.0.2}} erreichbar.
 \subsection{Webanwendung}
+
 \end{document}
