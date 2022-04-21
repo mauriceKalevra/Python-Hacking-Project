@@ -1,0 +1,11 @@
+data
+public
+img
+pictures
+files
+about
+index
+biete
+angebote
+faq
+skript
