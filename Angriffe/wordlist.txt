@@ -9,3 +9,16 @@ biete
 angebote
 faq
 skript
+schema
+app
+immobilie 
+js
+static
+stylesheet
+impressum
+datenschutz
+angebote
+beite
+myangebote
+suche
+
