@@ -123,5 +123,16 @@ Als Webanwendung dient ein Projekt aus einem früheren Semester. Dort war es Auf
 \section{Angriffe auf den Opfer-Server}
 \subsection{Spider-Angriff}
 Bei einem Spider Angriff ist es Ziel alle Ressourcen eines Webservers aufzusprüren und Herunterzuladen.
+Folgendes Codebeispiel versucht in einer einfachen Funktion mit Hilfe des Moduls requests alle Verzeichnisse und Dateien auf einem Webserver ausfindig zu machen.
+\begin{center}
+\includegraphics[scale=0.5]{../mygobuster.png}
+Codebeispiel 2: Python Funktion mygobuster
+\end{center}
+Hierbei wird in Zeile 4 eine Wörterliste mit üblichen Nodejs-Verzeichniss und Dateinamen eingelesen und entsprechend formatiert.
+In der Liste 'filters' befinden sich Dateiendungen nach denen gesucht werden soll. Nun wird über beide Listen iteriert und diese mit der url des Opfer-Servers verknüpft(vgl. Zeile 12) und dem Modul request übergeben(vgl. Zeile 13). Mit diesem ist es möglich Http Funktionalitäten zu nutzen. So wird ein Http request an den Opfer-Server geschickt und der response code ausgelesen(vgl. Zeile 14). Gibt der Webserver den Statuscode 200 zurück, so heißt dies dass die gesuchte Resource gefunden und übermittelt wurde. Die url wird ausgegeben und je nach Dateiendungen in die entsprechende Liste geschrieben. Bei Statuscode 301 handelt es sich um ein Verzeichnis.
+Die Funktion ist in der Lage ein großteil der Dateien und Verzeichnisse zu finden. Um die Perfomance zu erhöhen kann die Funktion zudem anhand von Threadding ausgeführt werden.
+
+
+
 \subsection{Selenium Browser Zugriff}
 \end{document}
