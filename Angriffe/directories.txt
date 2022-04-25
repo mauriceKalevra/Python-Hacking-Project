@@ -1,0 +1,16 @@
+http://172.17.0.2:1337/data/about
+http://172.17.0.2:1337/data/faq
+http://172.17.0.2:1337/data/impressum
+http://172.17.0.2:1337/data/datenschutz
+http://172.17.0.2:1337/data/about
+http://172.17.0.2:1337/data/impressum
+http://172.17.0.2:1337/img/background-images
+http://172.17.0.2:1337/static/bootstrap-4.0.0/js
+http://172.17.0.2:1337/static/js
+http://172.17.0.2:1337/static/css
+http://172.17.0.2:1337/static/bootstrap-4.0.0
+http://172.17.0.2:1337/data
+http://172.17.0.2:1337/img
+http://172.17.0.2:1337/js
+http://172.17.0.2:1337/static
+http://172.17.0.2:1337/favicon_io
