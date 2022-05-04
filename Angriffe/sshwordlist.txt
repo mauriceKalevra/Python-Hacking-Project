@@ -1,0 +1,4 @@
+admin password
+root toor
+admin admin
+root root
