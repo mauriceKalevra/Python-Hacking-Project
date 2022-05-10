@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<title>Web2-Projekt</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Eine Webapp für ein Uni Projekt">
+		
+		<script src="script.js"></script>
+		<!-- Links to local bootstrap files -->
+		<link rel="stylesheet" href="static/css/bootstrap.min.css">
+		<link rel="stylesheet" href="static/css/bootstrap-grid.min.css">
+		<link rel="stylesheet" href="static/css/bootstrap-reboot.min.css">
+	  	<link rel="stylesheet" href="stylesheet.css">
+
+		<script>
+		//
+		//some local scripts
+		//
+		
+		</script>
+	</head>
+
+	<body>
+    
+		<div class="wrapper">
+			
+			<!--HEADER-->
+
+			<header>
+
+				<div class="myNav">
+					<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<a class="navbar-brand" href="#"></a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+					  <span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarNavDropdown">
+					  <ul class="navbar-nav">
+						<li class="nav-item active">
+						  <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+						</li>
+						<li class="nav-item">
+						  <a class="nav-link" href="suche.html">Suche</a>
+						</li>
+						<li class="nav-item">
+						  <a class="nav-link" href="biete.html">Biete</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="about.html">Über uns</a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="datenschutz.html">Datenschutz</a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="impressum.html">Impressum</a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="faq.html">FAQ</a>
+						  </li>
+						
+					  </ul>
+					</div>
+				  </nav>
+					</div>
+
+				
+			</header>
+			<!--CONTENT/MAIN-->
+			<body>
+				<main2>
+					
+						<div class="jumbotron jumbotron-fluid" style="margin-bottom: 0px;">
+							<div class="container">
+							<div class="row justify-content-center align-items-center">
+								<h1 id="logo-text">Immobilien-Suche</h1>
+							</div>
+							<div class="row justify-content-center align-items-center">
+								<p id="logo-subtext">Immobilien-Suche</p>
+							</div>
+							</div>
+					
+					</div>
+					<div style="width: 100%; text-align: center; margin-top: 15px;">
+						Bitte alle Werte eingeben!
+					</div>
+					<div class="row myrow4 justify-content-center align-items-center">
+						<div class="col-0">
+							<select id="SearchTyp">
+								<option value="">Vermieten</option>
+								<option value="">Verkaufen</option>
+								</select>
+						</div>
+						<div class="col-4">
+
+							<input class="form-control" id="SearchOrt" type="text" placeholder="Wo: Ort">
+						</div>
+						<div class="col-0">
+							<select id="SearchImmoTyp">
+								<option value="">Wohnung</option>
+								<option value="">Haus</option>
+								</select>
+						</div>
+					</div>
+					<div class="row myrow justify-content-center align-items-center">
+							<div class="col-0">
+								<input class="form-control" id="SearchPreis" type="text" placeholder="Preis bis">
+
+							</div>
+							<div class="col-2">
+								<input class="form-control" id="SearchZimmer" type="text" placeholder="Zimmer ab">
+
+							</div>
+							<div class="col-2">
+								<input class="form-control" id="SearchFlaeche" type="text" placeholder="Fläche ab">
+							</div>
+
+
+					</div>
+					<div class="row myrow6 justify-content-end align-items-center">
+						<div class="col-4"><button id="submitButton" type="submit" name="submit" class="btn btn-primary offset-md-1">Suche</button></div>
+					</div>
+					<div id="results">
+
+					</div>
+					<!--
+						finde.html muss ganz weg, suche muss mit DB verknüpft werden und von da dann die "Wohnungen" die aus Biete eingefügt wurden!
+						Fragen an Mo:
+							Was sind die "Tags" nach denen man sucht, zb. Ort wo Wohnung ist usw.
+							Kann Finde.html weg?
+					-->
+				</main2>
+				<script>
+
+					
+					window.addEventListener("DOMContentLoaded", init);
+
+					async function init() {
+						registerClickEventForSubmitButton();
+					}
+
+
+					//Zum Testen
+					function removeform() {
+						const delform = document.getElementById("myform");
+						delform.remove();
+					}
+					//Zum Testen
+					function render(){
+						const endcard = document.createElement("h1");
+		 				endcard.innerText = "Ihre Suchergebnisse:";
+		  				endcard.style.textAlign = "center";
+		  				const main2 = document.getElementById("main2");
+		  				main2.append(endcard);
+					}
+					
+					//getElementByIDs in variable speichern und trimmen
+					function registerClickEventForSubmitButton(){
+						const submitButton = document.getElementById("submitButton");
+						submitButton.addEventListener("click", async (clickEvent) => {
+							clickEvent.preventDefault();
+							document.getElementById("results").innerHTML=""
+
+							const inSearchTyp = document.getElementById("SearchTyp")
+							
+							const StringSearchTyp = inSearchTyp.options[inSearchTyp.selectedIndex].text.trim();
+
+							const inSearchOrt = document.getElementById("SearchOrt")
+							const StringSearchOrt = inSearchOrt.value.trim();
+
+							const inImmoTyp = document.getElementById("SearchImmoTyp")
+							
+							const StringSearchImmoTyp = inImmoTyp.options[inImmoTyp.selectedIndex].text.trim();
+
+							const inSearchPreis = document.getElementById("SearchPreis")
+							const StringSearchPreis = inSearchPreis.value.trim();
+
+							const inSearchZimmer = document.getElementById("SearchZimmer")
+							const StringSearchZimmer = inSearchZimmer.value.trim();
+
+							const inSearchFlaeche = document.getElementById("SearchFlaeche")
+							const StringSearchFlaeche = inSearchFlaeche.value.trim();
+
+                            let url = new URL('http://localhost:1337/v1/search')
+                            let params = { typ: StringSearchTyp, ort: StringSearchOrt, immotyp: StringSearchImmoTyp, preis: StringSearchPreis, zimmer: StringSearchZimmer, flaeche: StringSearchZimmer}
+                            url.search = new URLSearchParams(params).toString();
+                            
+							
+							const res = await fetch(url);
+							const results = await res.json()
+							if(results.length == 0){
+								const noresult = document.createElement("p");
+								noresult.innerText= "Kein Ergebnis gefunden!";
+								noresult.align = "center";
+								document.getElementById("results").appendChild(noresult);
+								return 
+							}
+							results.forEach(immo => {
+								let div = document.createElement("div")
+								div.classList.add("row")
+								div.classList.add("myrow")
+								div.classList.add("justify-content-center")
+								let table = document.createElement("table")
+								table.style.width = "30%"
+								let tr1 = document.createElement("tr")
+								let th1 = document.createElement("th")
+								th1.innerText = immo.ort
+								tr1.appendChild(th1)
+								let tr2 = document.createElement("tr")
+								let td2 = document.createElement("td")
+								tr2.appendChild(td2)
+								let tr3 = document.createElement("tr")
+								let td3_1 = document.createElement("th")
+								td3_1.innerText = "Kaltmiete: " + immo.preis + "€"
+								tr3.appendChild(td3_1)
+								let td3_2 = document.createElement("th")
+								td3_2.innerText = "Wohnfläche: " + immo.flaeche + "m²"
+								tr3.appendChild(td3_2)
+								let td3_3 = document.createElement("th")
+								td3_3.innerText = "Zimmer: " + immo.zimmer
+								tr3.appendChild(td3_3)
+								table.appendChild(tr1)
+								table.appendChild(tr2)
+								table.appendChild(tr3)
+								div.appendChild(table)
+								document.getElementById("results").appendChild(div)
+							}); 
+							//removeform();
+						});
+					}
+					//registerClickEventForSubmitButton();
+				</script>
+				<!--FOOTER-->
+			</body>
+			<footer>
+				
+					<nav class="navbar navbar-expand-lg navbar-light bg-light">
+						<a class="navbar-brand" href="#"></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+						  <span class="navbar-toggler-icon"></span>
+						</button>
+	
+						<div class="collapse navbar-collapse" id="navbarNavDropdown">
+						  <ul class="navbar-nav navbar-center">
+							<li class="nav-item active">
+							  <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+							</li>
+							<li class="nav-item">
+							  <a class="nav-link" href="suche.html">Suche</a>
+							</li>
+							<li class="nav-item">
+							  <a class="nav-link" href="biete.html">Biete</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="about.html">Über uns</a>
+							  </li>
+							  <li class="nav-item">
+								<a class="nav-link" href="datenschutz.html">Datenschutz</a>
+							  </li>
+							
+							</li>
+						  </ul>
+						</div>
+					  </nav>
+						
+		<!-- JavaScript/JQuery Scripts -->
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+		<!--Our own scripts-->
+		<script src="js/slideshow.js"></script>
+
+	</body>
+</html>
+

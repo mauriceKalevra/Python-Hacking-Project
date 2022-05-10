@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<title>Web2-Projekt</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Eine Webapp für ein Uni Projekt">
+
+		
+		<script src="script.js"></script>
+		<!-- Links to local bootstrap files -->
+		<link rel="stylesheet" href="static/css/bootstrap.min.css">
+		<link rel="stylesheet" href="static/css/bootstrap-grid.min.css">
+		<link rel="stylesheet" href="static/css/bootstrap-reboot.min.css">
+	  	<link rel="stylesheet" href="stylesheet.css">
+
+		<script>
+
+		//some local scripts
+		</script>
+	</head>
+
+	<body>
+    
+		<div class="wrapper">
+			
+			<!--HEADER-->
+
+			<header>
+
+				<div class="myNav">
+					<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<a class="navbar-brand" href="#"></a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+					  <span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarNavDropdown">
+					  <ul class="navbar-nav">
+						<li class="nav-item active">
+						  <a class="nav-link" href="index.html">Home</a>
+						</li>
+						<li class="nav-item">
+						  <a class="nav-link" href="suche.html">Suche <span class="sr-only">(current)</span></a>
+						</li>
+						<li class="nav-item">
+						  <a class="nav-link" href="biete.html">Biete <span class="sr-only">(current)</span></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="about.html">Über uns <span class="sr-only">(current)</span></a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="datenschutz.html">Datenschutz <span class="sr-only">(current)</span></a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="impressum.html">Impressum <span class="sr-only">(current)</span></a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="faq.html">FAQ</a>
+						  </li>
+						
+						</li>
+					  </ul>
+					</div>
+				  </nav>
+					</div>
+
+				
+			</header>
+
+			<!--CONTENT/MAIN-->
+
+		<main8 id="main8">	
+			<main3 id="main3">
+				<div class="jumbotron jumbotron-fluid" style="margin-bottom: 0px;">
+					<div class="container">
+					  <div class="row justify-content-center align-items-center">
+						<h1 id="logo-text">Angebote</h1>
+					  </div>
+					  <div class="row justify-content-center align-items-center">
+						<p id="logo-subtext">Derzeitige Immobilien</p>
+					  </div>
+					</div>
+			
+			</div>
+					
+
+
+			</main8>
+
+				<script>
+
+		let immomodel = [];
+
+      	window.addEventListener("DOMContentLoaded", init);
+
+			
+
+				async function init() {
+					await loadimmofrombackend();
+					rendering();
+				}
+
+
+				function rendering() {
+
+				const main8 = document.getElementById("main8");
+				const head = document.createElement("h1");
+				head.innerText = "Hier finden Sie alle Angebote";
+				head.align = "center";
+
+
+
+				immomodel.forEach((immoitem) => {
+				//console.log(immoitem);
+
+				const newimmoItem = createNewimmoItem(immoitem);
+				const br = document.createElement("br");
+				main8.append(head);
+				head.append(newimmoItem);
+				newimmoItem.append(br);
+
+
+					});
+				}
+
+
+			async function loadimmofrombackend() {
+				const response = await fetch("/v1/angebote");
+				const immoJson = await response.json();
+
+				if(immoJson) {
+					immomodel = immoJson;
+					//console.log(immomodel);
+				}
+			}
+
+
+
+			function createNewimmoItem(immoitem) {
+
+					console.log(immoitem);
+					
+					
+					
+					//newImmotext = JSON.stringify(immoitem);
+					//console.log(JSON.stringify(immoitem));
+					//console.log("Hello world");
+	var table = document.createElement('table');
+	//table.setAttribute("border", 1);
+	//table.width = "10%";
+	table.align = "center";
+	
+	colitems = ["Angebotstyp:","Ort:","Objekttyp:", "Preis:", "Zimmer:", "Fläche:", "Kontakt:"];
+	objectitems = Object.entries(immoitem);
+	//rowitems = [Angebot, Ort, Objekt, Preis, Zimmer, Flaeche, Kontakt];
+	//const newline = document.createElement("br");							
+	//table.appendChild(newline);
+	for (var i = 1; i < 8; i++){
+    var tr = document.createElement('tr');   
+
+    var td1 = document.createElement('td');
+	var td2 = document.createElement('td');
+	td1.width = "400px";
+	td2.width = "400px";
+	td1.align = "left";
+	td2.align = "left";
+
+    var text1 = document.createTextNode(colitems[i-1]);
+    var text2 = document.createTextNode(objectitems[i][1]);
+
+
+    td1.appendChild(text1);
+    td2.appendChild(text2);
+	
+
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    table.appendChild(tr);
+}
+
+					return table;
+
+				}
+
+			</script>
+			
+			<!--FOOTER-->
+		</body>
+			<footer>
+				
+					<nav class="navbar navbar-expand-lg navbar-light bg-light">
+						<a class="navbar-brand" href="#"></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+						  <span class="navbar-toggler-icon"></span>
+						</button>
+	
+						<div class="collapse navbar-collapse" id="navbarNavDropdown">
+						  <ul class="navbar-nav navbar-center">
+							<li class="nav-item active">
+							  <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+							</li>
+							<li class="nav-item">
+							  <a class="nav-link" href="suche.html">Suche</a>
+							</li>
+							<li class="nav-item">
+							  <a class="nav-link" href="biete.html">Biete</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="about.html">Über uns</a>
+							  </li>
+							  <li class="nav-item">
+								<a class="nav-link" href="datenschutz.html">Datenschutz</a>
+							  </li>
+							
+							</li>
+						  </ul>
+						</div>
+					  </nav>
+		
+					    <!-- JavaScript/JQuery Scripts -->
+						<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+						<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+						<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+						
+
+	</body>
+
+</html>
+

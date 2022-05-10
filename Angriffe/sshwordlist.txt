@@ -6,8 +6,6 @@ sinus cosinus
 tangens riebert
 supp woritz
 win noch
-wier und
-wolle wunktion
 admin password
 root toor
 admin admin
@@ -18,14 +16,6 @@ supp woritz
 win noch
 wier und
 wolle wunktion
-admin password
-root toor
-admin admin
-server admin
-sinus cosinus
-tangens riebert
-supp woritz
-win noch
 wier und
 wolle wunktion
 root root
