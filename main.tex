@@ -33,7 +33,7 @@
 
 % Front page
 
-\title{\small{WPM Dokumentation}\\\vspace{3mm}\Large{Hacking mit Python}}
+\title{\small{WPM}\\\vspace{3mm}\Large{Hacking mit Python\\\small{Projektdokumentation}}}
 \author{ \small{verfasst von}\\ Moritz Rupp}
 \date{Sommersemester 2022}
 
@@ -123,13 +123,14 @@ Als Webanwendung dient ein Projekt aus einem früheren Semester. Dort war es Auf
 \section{Angriffe auf den Opfer-Server}
 \subsection{Spider-Angriff}
 Bei einem Spider Angriff ist es Ziel alle Ressourcen eines Webservers aufzusprüren und Herunterzuladen.
-Folgendes Codebeispiel versucht in einer einfachen Funktion mit Hilfe des Moduls requests alle Verzeichnisse und Dateien auf einem Webserver ausfindig zu machen.
+Folgendes Codebeispiel versucht in einer Funktion mit Hilfe des Moduls requests alle Verzeichnisse und Dateien auf einem Webserver ausfindig zu machen.
 \begin{center}
-\includegraphics[scale=0.5]{../mygobuster.png}
+\includegraphics[scale=0.5]{data/mygobuster.png}
 Codebeispiel 2: Python Funktion mygobuster
 \end{center}
-Hierbei wird in Zeile 4 eine Wörterliste mit üblichen Nodejs-Verzeichniss und Dateinamen eingelesen und entsprechend formatiert.
-In der Liste 'filters' befinden sich Dateiendungen nach denen gesucht werden soll. Nun wird über beide Listen iteriert und diese mit der url des Opfer-Servers verknüpft(vgl. Zeile 12) und dem Modul request übergeben(vgl. Zeile 13). Mit diesem ist es möglich Http Funktionalitäten zu nutzen. So wird ein Http request an den Opfer-Server geschickt und der response code ausgelesen(vgl. Zeile 14). Gibt der Webserver den Statuscode 200 zurück, so heißt dies dass die gesuchte Resource gefunden und übermittelt wurde. Die url wird ausgegeben und je nach Dateiendungen in die entsprechende Liste geschrieben. Bei Statuscode 301 handelt es sich um ein Verzeichnis.
+Hierbei wird in Zeile 2 eine Wörterliste mit üblichen Nodejs-Verzeichnis und Dateinamen anhand einer List Comprehension eingelesen und entsprechend formatiert.
+In der Liste 'filters' befinden sich Dateiendungen nach denen gesucht werden soll. Nun wird über beide Listen iteriert und diese mit der url des Opfer-Servers verknüpft(vgl. Zeile 7) und dem Modul request übergeben(vgl. Zeile 8). Mit diesem ist es möglich Http Funktionalitäten zu nutzen. So wird ein Http request an den Opfer-Server geschickt und der Response code ausgelesen(vgl. Zeile 10). Gibt der Webserver den Statuscode 301 zurück, so heißt dies dass die gefunde Resource ein Verzeichnis darstellt. Der Pfad wird ausgegeben und der Variable 'newurl' zugewiesen. Anschließend wird in Zeile 14 die Funktion rekursiv aufgerufen um nach tieferen Verzeichnissen zu suchen. Lautet der Statuscode 200, handelt es sich um eine gefunde Datei wie Html, Css oder Javascript. Auch hier wird der Pfad ausgegeben und zudem entsprechend
+ der Dateiendung in eine Datei geschrieben(vgl. Zeile 20). In Zeile 21 wird zudem in einem try-except block 
 Die Funktion ist in der Lage ein großteil der Dateien und Verzeichnisse zu finden. Um die Perfomance zu erhöhen kann die Funktion zudem anhand von Threadding ausgeführt werden.
 \newpage
 
