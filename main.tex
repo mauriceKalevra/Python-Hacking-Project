@@ -37,8 +37,6 @@
 \author{ \small{verfasst von}\\ Moritz Rupp}
 \date{Sommersemester 2022}
 
-
-
 %Document start 
 \begin{document}
 
@@ -168,6 +166,10 @@ Die Webanwendung wird über eine SSH Schnittstelle gewartet. Nun  wird versucht 
 \begin{center}
  \includegraphics[scale=0.5]{data/ssh.png}
 \end{center}
-Anfangs wird eine que angelegt, die in einer Exception befüllt wird(vgl. Zeile 28). Die Funktion wird anschließend erneut aufgerufen und es wird überprüft ob die que leer ist. Nun wird die Paramiko Biblothek aufgerufen(vgl. Zeile 8). Diese bietet SSH Implementierungen für client und serverseitige Funktionalitäten. 
+Anfangs wird eine que angelegt, die in einer Exception befüllt wird(vgl. Zeile 28). Die Funktion wird anschließend erneut aufgerufen und es wird überprüft ob die que leer ist. Nun wird die Paramiko Biblothek aufgerufen(vgl. Zeile 8). Diese bietet SSH Implementierungen für client und serverseitige Funktionalitäten. Ab Zeile 11 wird Username und Passwort aus der que ausgelesen und entsprechen formatiert. Nun wird versucht eine Verbindung mit den übergebenen Anmeldedaten herzustellen(vglt. Zeile 14). Ist die verbidnung erfolgreich, werden Nutzername und Passwort ausgegeben(vgl. Zeile 16), sowie das Programm gestoppt. Im gleichen Schleifendurchlauf werden zudem exceptions abgefangen. Die Funktion findet das Passwort und gibt es aus.\\
+\begin{center}
+\includegraphics[scale=0.5]{data/success.png}
+\end{center}
 \subsection{Schadsoftware}
+Nun soll über die erlangten Zugangsdaten eine Schadware auf den Opfer Server geladen werden, die ein Defacement der Seite umsetzt und zudem die Zugangsdaten der Schnittstelle ändert.
 \end{document}
