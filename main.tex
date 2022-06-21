@@ -124,18 +124,50 @@ Als Webanwendung dient ein Projekt aus einem früheren Semester. Dort war es Auf
 \subsection{Spider-Angriff}
 Bei einem Spider Angriff ist es Ziel alle Ressourcen eines Webservers aufzusprüren und Herunterzuladen.
 Folgendes Codebeispiel versucht in einer Funktion mit Hilfe des Moduls requests alle Verzeichnisse und Dateien auf einem Webserver ausfindig zu machen.
+
+Erster Ansatz war es mit hilfe der python Biblothek 'Beautifullsoup' alle html Dokumente ausfindig zu machen.
+Hierbei wird auch mit dem python modul 'requests' gearbeitet. Dieses nimmt als Parameter eine url entgegen und holt über ein http request das html Dokument ein(vgl. Zeile 2). Dieses wird nun mit Beautifullsoup geparsed(vgl. Zeile 3). In Zeile 5 werden nun in einer for schleife alle html hyperlink-tags gefunden, in Zeile 6 auf die urls minimiert(vgl. Zeile 7) und schließlich ausgegeben. Die einfache Funktion findet nahezu alle html Seiten.
+\begin{center}
+ \includegraphics[scale=0.5]{data/scrapemy.png}
+\end{center}
+\begin{center}
+ Codebeispiel 2: Python Funktion myscrape
+\end{center}
+\newpage
+Um alle weiteren Html Dokumente sowie Verzeichhnisse und Bilder zu finden verwendet die Funktion 'mygobuster' Wörterlisten und Rekursion.
 \begin{center}
 \includegraphics[scale=0.5]{data/mygobuster.png}
-Codebeispiel 2: Python Funktion mygobuster
+Codebeispiel 3: Python Funktion mygobuster
 \end{center}
 Hierbei wird in Zeile 2 eine Wörterliste mit üblichen Nodejs-Verzeichnis und Dateinamen anhand einer List Comprehension eingelesen und entsprechend formatiert.
 In der Liste 'filters' befinden sich Dateiendungen nach denen gesucht werden soll. Nun wird über beide Listen iteriert und diese mit der url des Opfer-Servers verknüpft(vgl. Zeile 7) und dem Modul request übergeben(vgl. Zeile 8). Mit diesem ist es möglich Http Funktionalitäten zu nutzen. So wird ein Http request an den Opfer-Server geschickt und der Response code ausgelesen(vgl. Zeile 10). Gibt der Webserver den Statuscode 301 zurück, so heißt dies dass die gefunde Resource ein Verzeichnis darstellt. Der Pfad wird ausgegeben und der Variable 'newurl' zugewiesen. Anschließend wird in Zeile 14 die Funktion rekursiv aufgerufen um nach tieferen Verzeichnissen zu suchen. Lautet der Statuscode 200, handelt es sich um eine gefunde Datei wie Html, Css oder Javascript. Auch hier wird der Pfad ausgegeben und zudem entsprechend
- der Dateiendung in eine Datei geschrieben(vgl. Zeile 20). In Zeile 21 wird zudem in einem try-except block 
-Die Funktion ist in der Lage ein großteil der Dateien und Verzeichnisse zu finden. Um die Perfomance zu erhöhen kann die Funktion zudem anhand von Threadding ausgeführt werden.
-\newpage
+ der Dateiendung in eine Datei geschrieben(vgl. Zeile 20). Ab Zeile 21 wird zudem in einem try-except Block der Fall abgefangen das ein binary File gefunden wird.  
+ 
+ 
+Die Funktion ist in der Lage ein großteil der Dateien und Verzeichnisse zu finden. 
 
+Des weiteren versucht die Funktion CSSbuster weitere Dateien ausfindig zu machen, die in CSS Dateien angegeben sind. Hierbei wird mit Regulären ausdrücken die CSS Datei auf urls untersucht(vgl. Zeile 5). Anschließend werden mit ähnlichem Ansatz die Dateien heruntergeladen und der Pfad in eine Datei geschrieben.
+\begin{center}
+\includegraphics[scale=0.5]{data/cssbuster.png}
+\end{center}
+\begin{center}
+ Codebeispiel 4: CSSbuster
+\end{center}
+Die Funktion findet alle in CSS Dateien hinterlegten Bilder.
+\newpage
 \subsection{Selenium Browser Angriff}
 Bei diesem Angriff sollen automatisiert möglichst alle Seiten der Webanwendung besucht werden. Zudem sollen Funktionalitäten wie Formulare befüllt und abgeschickt werden.
+\begin{center}
+ \includegraphics[scale=0.5]{data/bot.png}
+\end{center}
+Anfangs wird der entsprechende Treiber für den Firefox browser eingeladen(vgl. Zeile 2-3). Anschließend wird über die zuvor angelegte Datei mit den Html Dokumenten iteriert und jeweilige Seiten geöffnet. In der Seite 'biete.html' werden zudem Formulardaten eingetragen und abgeschickt(vgl. Zeile 7-23).
+\newpage
 \subsection{SSH Angriff}
+Hierbei sollen Admin-Schnittstellen angegriffen und Kompromitiert werden.
+Die Webanwendung wird über eine SSH Schnittstelle gewartet. Nun  wird versucht anhand eines Wörtbuch Angriffes an die Anmeldedaten zu gelangen.
+\begin{center}
+ \includegraphics[scale=0.5]{data/ssh.png}
+\end{center}
+Anfangs wird eine que angelegt, die in einer Exception befüllt wird(vgl. Zeile 28). Die Funktion wird anschließend erneut aufgerufen und es wird überprüft ob die que leer ist. Nun wird die Paramiko Biblothek aufgerufen(vgl. Zeile 8). Diese bietet SSH Implementierungen für client und serverseitige Funktionalitäten. 
 \subsection{Schadsoftware}
 \end{document}
