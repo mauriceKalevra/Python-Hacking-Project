@@ -19,3 +19,6 @@ SSH into the 'Host-Server'(Docker container):
 ~$ ssh root@172.17.0.2(docker container ip)  
 pw : root
 
+Execute attack:  
+
+python attack.py

