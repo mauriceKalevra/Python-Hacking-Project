@@ -58,7 +58,7 @@ Anwendungen wie Webserver sind häufig der zentrale und angreifsbarste Teil eine
 Ziel dieses Projektes ist es die angreifbare Infrastrustur in Form des Webserver bereitzustellen und diesen anschließend anhand einer in Python programmierten Software anzugreifen.
 Der Angriff soll im ersten Schritt alle Inhalte des Opfer-Servers aufspüren und herunterladen. Anschließend sollten über den Browser alle Seiten automatisiert besucht und die Funktionalität genutzt werden.
 Des weiteren ist eine in der Infrastrustur bereitgestellte Schnittstelle wie SSH anhand eines Wörterbuch-Angriffs zu kompromitieren. Abschließend soll mit den erlangten Zugangsdaten eine Schadsoftware auf den Opfer-Server geladen werden, mit dieser ein defacement der gehosteten Webseite umgesetzt werden kann.\\
-Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schritte. 
+Dieses Dokument beleuchtet die Umsetzung und Implementierung der einzelnen Schritte.  
 
 \newpage
 \section{Infrastrustur}
@@ -130,7 +130,7 @@ Hierbei wird auch mit dem python modul 'requests' gearbeitet. Dieses nimmt als P
  def myscrape(url):
  	r = requests.get(url)
  	soup = BeautifulSoup(r.text,"html.parser")
-  	for links in soup.find_all("a"):
+	for links in soup.find_all("a"):
 	 	href = links.attrs['href']
 	 	print(href)
   
@@ -371,12 +371,29 @@ Nachdem die Malware auf den Opfer-Server gesendet wurde, wird sie nun von der Fu
  \end{lstlisting}
 
 \end{figure}
-Mit hilfe von Paramiko wird eine SSH Verbindung aufgebaut(vgl. Zeile 5). Anschließend wird in Zeile 7 über stdin des remote Servers die Malware gestartet.
+Mit hilfe von Paramiko wird eine SSH Verbindung aufgebaut(vgl. Zeile 5). Anschließend wird in Zeile 7 über stdin des remote Servers die Malware gestartet.\\
+Nun galt es die einzelnen Funktionen in eine Anwendung zusammenzuführen um einen komplett automatisierten Angriff zusammenzuführen. Des weiteren werden Methoden der Obfuskation verwendet um Debugging zu erschweren.\\
 \newpage
-\section{Ausführung}
-Die einzelnen Funktionen und Klassen werden nun zu einer Datei 'attack.py' zusammengeführt.
+Erster Ansatz war es hier das Python Programm zu byte-code zu Kompilieren.
+\begin{center}
+ \colorbox{mshadecolor}{\parbox{0.60\textwidth}{python -OO -m py\_compile <your attack.py}}
+\end{center}
+Des weiteren wird das Tool Oxyry verwendet[8]. Mit diesem ist es möglich komplette möglich Obfuskation zu erlangen.
 
+\begin{figure}[h]
+\caption{Obfuskation von Attackssh}
+\begin{center}
+ \includegraphics[scale=0.28]{data/obfus.png}
+\end{center}
+
+\end{figure}
+\vspace{5mm}
+Nach Ausführung der Schadware kann festgestellt werden das alle Angriffsziele erreicht wurden. 
 \newpage
+\section{Eigentständigkeitserklärung}
+Hiermit bestätige ich, dass ich die vorliegende Arbeit selbstständig verfasst und keine anderen Publikationen als die angegebenen benutzt habe. Alle Teile meiner Arbeit, die wortwörtlich oder dem Sinn nach anderen Werken entnommen sind, wurden unter Angabe der Quelle kenntlich gemacht. Gleiches gilt für von mir verwendeten Internetquellen. Die Arbeit ist weder von mir noch von einem Kommilitonen in einem anderen Seminar vorgelegt worden.\\
+Moritz Rupp, Albstadt, 27.06.2022
+
 \section{References}
 [1] Docker Engine overview, 20.06.2022, https://docs.docker.com/engine/
 
@@ -403,6 +420,8 @@ Die einzelnen Funktionen und Klassen werden nun zu einer Datei 'attack.py' zusam
 \vspace{4mm}
 
 [7] Python dokumentation, 14.06.2022, https://docs.python.org/3.8/library/os.html\#os.system
+
+[8] Oxyry, 24.06.2022, https://pyob.oxyry.com/
 
 \vspace{4mm}
 
