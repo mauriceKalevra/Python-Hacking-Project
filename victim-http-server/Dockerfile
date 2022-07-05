@@ -22,9 +22,9 @@ RUN service ssh start
 
 EXPOSE 22
 
-RUN git clone https://github.com/mauriceKalevra/Web2-Projekt.git
+RUN git clone https://github.com/mauriceKalevra/Node.js-web-application 
 
-WORKDIR Web2-Projekt
+WORKDIR Node.js-weNode.js-web-applicationn
 
 RUN npm install
 
