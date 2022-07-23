@@ -20,5 +20,5 @@ SSH into the 'Host-Server'(Docker container):
 pw : root
 
 **Execute attack:**  
-
+cd Angriffe  
 python attack.py
