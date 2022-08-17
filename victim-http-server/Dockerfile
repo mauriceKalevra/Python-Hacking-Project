@@ -22,9 +22,9 @@ RUN service ssh start
 
 EXPOSE 22
 
-RUN git clone https://github.com/mauriceKalevra/Node.js-web-application 
+RUN git clone https://github.com/mauriceKalevra/node-web-application.git 
 
-WORKDIR Node.js-weNode.js-web-applicationn
+WORKDIR node-web-application
 
 RUN npm install
 
