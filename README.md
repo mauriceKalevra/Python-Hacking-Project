@@ -1,5 +1,5 @@
 # Python-Hacking-Project
-Application that simulates an attack on a Http server via python
+Uni project that should simulate an attack on an HTTP server via python.
 
 **Prerequesites:**
 
