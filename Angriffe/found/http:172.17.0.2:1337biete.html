@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<title>Web2-Projekt</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Eine Webapp für ein Uni Projekt">
+		
+		<script src="script.js"></script>
+		<!-- Links to local bootstrap files -->
+		<link rel="stylesheet" href="static/css/bootstrap.min.css">
+		<link rel="stylesheet" href="static/css/bootstrap-grid.min.css">
+		<link rel="stylesheet" href="static/css/bootstrap-reboot.min.css">
+	  	<link rel="stylesheet" href="stylesheet.css">
+
+		<script>
+		//
+		//some local scripts
+		//
+		
+		</script>
+	</head>
+
+	<body>
+    
+		<div class="wrapper">
+			
+			<!--HEADER-->
+
+			<header>
+
+				<div class="myNav">
+					<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<a class="navbar-brand" href="#"></a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+					  <span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarNavDropdown">
+					  <ul class="navbar-nav">
+						<li class="nav-item active">
+						  <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+						</li>
+						<li class="nav-item">
+						  <a class="nav-link" href="suche.html">Suche</a>
+						</li>
+						<li class="nav-item">
+						  <a class="nav-link" href="biete.html">Biete</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="about.html">Über uns</a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="datenschutz.html">Datenschutz</a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="impressum.html">Impressum</a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="faq.html">FAQ</a>
+						  </li>
+						
+						</li>
+					  </ul>
+					</div>
+				  </nav>
+					</div>
+
+				
+			</header>
+			<body>
+				<!--CONTENT/MAIN-->
+				<main3 id="main3">
+					<div class="jumbotron jumbotron-fluid" style="margin-bottom: 0px;">
+						<div class="container">
+						  <div class="row justify-content-center align-items-center">
+							<h1 id="logo-text">Verkaufen</h1>
+						  </div>
+						  <div class="row justify-content-center align-items-center">
+							<p id="logo-subtext">Verkaufen Sie ihre Immobilien</p>
+						  </div>
+						</div>
+				
+				</div>
+
+
+				<!--Form-->
+			
+
+
+				<form id="myform">
+
+
+				<div class="row myrow4 justify-content-center align-items-center">
+					<div class="col-1">
+						<select id="angebotstyp">
+							<option value=””>Vermieten</option>
+							<option value=””>Verkaufen</option>
+							</select>
+					</div>
+					<div class="col-4">
+
+						<input class="form-control" id="ort" type="text" placeholder="Wo: Ort">
+					</div>
+					<div class="col-1">
+						<select id="objekttyp">
+							<option value=””>Wohnung</option>
+							<option value=””>Haus</option>
+							</select>
+					</div>
+				</div>
+
+				
+				<div class="row myrow5 justify-content-center align-items-center">
+						<div class="col-4">
+							<input class="form-control"  id="preis" type="text" required placeholder="Preis">
+
+						</div>									
+				</div>
+				<div class="row myrow5 justify-content-center align-items-center">
+					<div class="col-4">
+						<input class="form-control" id="zimmer" type="text" placeholder="Zimmer" required>
+
+					</div>		
+				</div>
+				<div class="row myrow5 justify-content-center align-items-center">
+					<div class="col-4">
+						<input class="form-control" id="flaeche" type="text" placeholder="Fläche">
+
+					</div>		
+					
+				</div>
+				<div class="row myrow5 justify-content-center align-items-center">
+					<div class="col-4">
+						<input class="form-control" id="kontakt" type="text" placeholder="Kontakt">
+
+					</div>		
+				</div>
+				<div class="row myrow6 justify-content-end align-items-center">
+					<div class="col-4"><a href="#"><button id="saveimmoButton" name="submit" class="btn btn-primary offset-md-1">Submit</button></a></div>
+				</div>
+			</form>
+
+
+				</main3>
+				<script>
+
+		immoModel = [];
+
+		window.addEventListener("DOMContentLoaded", init);
+
+
+		async function init() {
+			registerClickEventForSaveButton();
+		}
+
+		//get Elements via id and trim the values in a new variable
+		function registerClickEventForSaveButton() {
+			const saveButton = document.getElementById("saveimmoButton");
+			saveButton.addEventListener("click", async (clickEvent) => {
+				clickEvent.preventDefault();
+
+				
+
+				const inangebot = document.getElementById("angebotstyp");
+				//const invalue = inangebot.options[inangebot.selectedIndex].value;
+				const angebot = inangebot.options[inangebot.selectedIndex].text.trim();
+				//const angebot = tangebot.value.trim();
+
+				const inort = document.getElementById("ort");
+				const ort = inort.value.trim();
+
+				const inobjekt = document.getElementById("objekttyp");
+				const objekt = inobjekt.options[inobjekt.selectedIndex].text.trim();
+
+				const inpreis = document.getElementById("preis");
+				const preis = inpreis.value.trim();
+
+				const inzimmer = document.getElementById("zimmer");
+				const zimmer = inzimmer.value.trim();
+
+				const inflaeche = document.getElementById("flaeche");
+				const flaeche = inflaeche.value.trim();
+
+				const inkontakt = document.getElementById("kontakt");
+				const kontakt = inkontakt.value.trim();
+
+								
+			
+			
+				await storeNewimmo(angebot, ort, objekt, preis, zimmer, flaeche, kontakt);
+			});
+		}
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		function removeform() {
+			const delform = document.getElementById("myform");
+			delform.remove();
+		}
+
+		
+		// Old function! Might be usefull later...
+		function getvalues() {
+			const Angebot = document.getElementById("angebotstyp");
+			const Ort = document.getElementById("ort");
+			const Objekt = document.getElementById("objekttyp");
+			const Preis = document.getElementById("preis");
+			const Zimmer = document.getElementById("zimmer");
+			const Flaeche = document.getElementById("flaeche");
+			const Kontakt = document.getElementById("kontakt");
+		}
+
+
+
+		
+
+		async function storeNewimmo(item1, item2, item3, item4, item5, item6, item7) {
+        const randomNumber = Math.random() * 100000;
+        const randomId = Number.parseInt(randomNumber);
+
+        const newimmoItem = {
+          id: randomId,
+          angebot: item1,
+		  ort: item2,
+		  objekt: item3,
+		  preis: item4,
+		  zimmer: item5,
+		  flaeche: item6,
+		  kontakt: item7
+        };
+
+		//render dynamic html, endcard message
+		render(randomId);
+
+		//remove form
+		removeform();
+        immoModel.push(newimmoItem);
+
+        await sendImmoItemToBackend(newimmoItem);
+      }
+
+
+	  async function sendImmoItemToBackend(newimmoItem) {
+		  await fetch("/v1/immo/", {
+			  method: "POST",
+			  headers: {
+				  "content-type": "application/json",
+			  },
+			  body: JSON.stringify(newimmoItem)
+		  });
+
+		  
+		  
+	  }
+
+	  function render(randomId) {
+	
+	//const randomNumber = Math.random() * 100000;
+    //const randomId = Number.parseInt(randomNumber);
+
+	const danktext = document.createElement("h4");
+	danktext.innerText="Vielen Dank für Ihre Inserierung. Folgende Daten haben Sie Eingetragen: "
+	danktext.align = "center";
+		const inAngebot = document.getElementById("angebotstyp");
+		const Angebot = inAngebot.options[inAngebot.selectedIndex].text;
+		const Ort = document.getElementById("ort").value;
+		const inObjekt = document.getElementById("objekttyp");
+		const Objekt = inObjekt.options[inObjekt.selectedIndex].text;
+		const Preis = document.getElementById("preis").value;
+		const Zimmer = document.getElementById("zimmer").value;
+		const Flaeche = document.getElementById("flaeche").value;
+		const Kontakt = document.getElementById("kontakt").value;
+		  
+	var table = document.createElement('table');
+	//table.setAttribute("border", 1);
+	//table.width = "10%";
+	table.align = "center";
+	colitems = ["Angebotstyp:","Ort:","Objekttyp:", "Preis:", "Zimmer:", "Fläche:", "Kontakt:"];
+	rowitems = [Angebot, Ort, Objekt, Preis, Zimmer, Flaeche, Kontakt];
+	for (var i = 1; i < 8; i++){
+    var tr = document.createElement('tr');   
+
+    var td1 = document.createElement('td');
+	var td2 = document.createElement('td');
+	td1.width = "60%";
+	td2.width = "60%";
+	td1.align = "left";
+	td2.align = "left";
+
+    var text1 = document.createTextNode(colitems[i-1]);
+    var text2 = document.createTextNode(rowitems[i-1]);
+
+    td1.appendChild(text1);
+    td2.appendChild(text2);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+
+    table.appendChild(tr);
+}
+	document.body.appendChild(table);
+const idinfo = document.createElement("h3");
+idinfo.innerText = "Ihr token: ";
+const token = document.createElement("span");
+token.innerText = randomId;
+const idinfo2 = document.createElement("h4");
+idinfo2.innerText = "Wichtig! Speichern Sie sich ihren Token um Ihren Eintrag bei Wunsch zu löschen";
+
+		const main3 = document.getElementById("main3");
+		  main3.append(danktext);
+		  danktext.append(table);
+		  table.append(idinfo);
+		  idinfo.append(token);
+		  token.append(idinfo2);
+
+	  }
+
+
+				</script>
+				<!--FOOTER-->
+			</body>
+			<footer>
+				
+					<nav class="navbar navbar-expand-lg navbar-light bg-light">
+						<a class="navbar-brand" href="#"></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+						  <span class="navbar-toggler-icon"></span>
+						</button>
+	
+						<div class="collapse navbar-collapse" id="navbarNavDropdown">
+						  <ul class="navbar-nav navbar-center">
+							<li class="nav-item active">
+							  <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+							</li>
+							<li class="nav-item">
+							  <a class="nav-link" href="suche.html">Suche</a>
+							</li>
+							<li class="nav-item">
+							  <a class="nav-link" href="biete.html">Biete</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="about.html">Über uns</a>
+							  </li>
+							  <li class="nav-item">
+								<a class="nav-link" href="datenschutz.html">Datenschutz</a>
+							  </li>
+							
+							</li>
+						  </ul>
+						</div>
+					  </nav>
+						
+					  <!-- JavaScript/JQuery Scripts -->
+						<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+						<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+						<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+	</body>
+</html>
+
