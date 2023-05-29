@@ -140,7 +140,7 @@ def attackssh(ip):
 def getCredentials():
     #hole gefunde credentials aus datei
     cred = open('cred.txt','r').readlines()
-    #case zu string
+    #cast zu string
     cred_string = cred[0].split()
     #lese username und passwort aus
     global user, pw
