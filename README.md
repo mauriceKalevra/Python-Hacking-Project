@@ -3,7 +3,7 @@ Uni project that should simulate an attack on an HTTP server via python.
 
 **Prerequesites:**
 
-- Docker installed
+- Docker, Python installed
 
 **Run the victims http server:**  
 ~$ cd victim-http-server  
